@@ -40,13 +40,13 @@ def value_update(grid_world):
 # plot the value table
 def plot_grid(grid_world, iteration=0):
     annot_kwargs = {
-        'fontsize': 'x-large'
+        'fontsize': '18'
     }
     plt.figure(figsize=(6, 6), dpi=100)
     sns.heatmap(grid_world, 
                 annot=True,
                 annot_kws=annot_kwargs,
-                linewidths=.5, 
+                linewidths=1., 
                 fmt='.1f',
                 cmap='crest',
                 cbar=False)
@@ -55,8 +55,8 @@ def plot_grid(grid_world, iteration=0):
                 labelbottom=False,
                 left=False,
                 labelleft=False)
-    plt.title(f'Iteration {iteration}', fontsize=20)
-    plt.savefig(f'./plots/{iteration}.png')
+    plt.title(f'Iteration {iteration}', fontsize=20, fontweight='bold', pad=10)
+    plt.savefig(f'./plots/example_3_5/{iteration}.png')
     # plt.show()
 
 
@@ -65,10 +65,13 @@ if __name__ == "__main__":
     grid_world = np.zeros(shape=(5, 5))
     actions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
     gamma = 0.9
+
+    iter_to_save = {0, 1, 4, 10, 32}
+
     for i in range(40):
         prev_grid = np.copy(grid_world)
         value_update(grid_world)
-        if i % 2 == 0:
+        if i in iter_to_save:
             plot_grid(grid_world, i)
         if np.allclose(prev_grid, grid_world, rtol=0.01):
             print('done', i)
