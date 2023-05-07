@@ -28,23 +28,26 @@ def value_update(grid_world, actions):
     '''
     grid_world: the 5x5 grid world map, numpy array
     '''
-    # act_lists = np.array(['r', 'd', 'l', 'u'])
+    # Hex code for (right, down, left, up)
     act_lists = np.array([0x2190, 0x2193, 0x2192, 0x2191])
     optim_acts = []
     for row in range(5):
         acts = []
         for col in range(5):
             value_candidates = np.zeros(shape=(len(actions)))
-            
+            # Iterate over all four actions
             for i , act in enumerate(actions):
                 reward, next_state = get_reward((row, col), act)
                 next_value = grid_world[next_state]
+                # Get a discounted next value for current action
                 value_candidates[i] = reward + gamma * next_value
-            
+            # Bellman optimal equation
             grid_world[row, col] = value_candidates.max()
 
+            # Finding the optimal action(s)
             max_args = np.where(value_candidates == value_candidates.max())
-            selected_acts = ''.join([chr(c) for c in act_lists[max_args].tolist()])
+            selected_acts = ''.join([chr(c) for 
+                                        c in act_lists[max_args].tolist()])
             acts.append(selected_acts)
 
         optim_acts.append(acts)
@@ -53,7 +56,7 @@ def value_update(grid_world, actions):
 
 
 # plot the value table
-def plot_grid(grid_world, iteration=0, annot = None):
+def plot_grid(grid_world, annot = None):
     annot_kwargs = {
         'fontsize': '18',
         # 'fontweight': 'bold'
@@ -99,6 +102,6 @@ if __name__ == "__main__":
         if np.allclose(prev_grid, grid_world, rtol=0.001):
             print('done', i)
             # print(optim_acts)
-            plot_grid(grid_world, i, annot = optim_acts)
-            plot_grid(grid_world, i, annot = None)
+            plot_grid(grid_world, annot = optim_acts)
+            plot_grid(grid_world, annot = None)
             break
