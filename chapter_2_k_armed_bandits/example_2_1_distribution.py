@@ -8,7 +8,7 @@ if __name__ == "__main__":
     means = np.random.normal(size=(10, ))
 
     # Generate sample data based on normal distribution
-    data = [np.random.normal(mean, 1, 2000) for mean in means]
+    data = [np.random.normal(mean, 1.0, 2000) for mean in means]
 
     # Create violin plot
     plt.figure(figsize=(8, 6), dpi=150)
