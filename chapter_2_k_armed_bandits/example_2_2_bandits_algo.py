@@ -1,8 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
+
 
 SEED = 200
-np.random.seed(200)
+np.random.seed(SEED)
 
 # Get the action with the max Q value
 def get_argmax(G:np.array) -> int:
@@ -28,12 +30,11 @@ def run_bandit(K:int,
             rewards:np.array,
             optim_acts_ratio: np.array,
             epsilon: float, 
-            num_steps:int=1000, 
-            curr_round:int=0) -> None:
+            num_steps:int=1000) -> None:
     
     Q = np.zeros(K) # The average action-value for each actions
     N = np.zeros(K) # The number of times each action been selected    
-    optim_acts = 0
+    ttl_optim_acts = 0
 
     for i in range(num_steps):
         # print(q_star)
@@ -48,36 +49,37 @@ def run_bandit(K:int,
         N[A] += 1
         Q[A] += (R - Q[A]) / N[A]
 
-        optim_acts += is_optim
-        rewards[curr_round, i] = R
-        optim_acts_ratio[curr_round, i] = optim_acts / (i + 1)
-
+        ttl_optim_acts += is_optim
+        rewards[i] = R
+        optim_acts_ratio[i] = ttl_optim_acts / (i + 1)
 
 
 if __name__ == "__main__":
 
     # Initializing the hyper-parameters
     K = 10 # Number of arms
-    epsilon = 0.0
+    epsilons = [0.0, 0.01, 0.1]
     num_steps = 1000
-    total_rounds = 1000
+    total_rounds = 2000
 
     # Initialize the environment
     q_star = np.random.normal(loc=0, scale=1.0, size=K)
-    rewards = np.zeros(shape=(total_rounds, num_steps))
-    optim_acts_ratio = np.zeros(shape=(total_rounds, num_steps))
+    rewards = np.zeros(shape=(len(epsilons), total_rounds, num_steps))
+    optim_acts_ratio = np.zeros(shape=(len(epsilons), total_rounds, num_steps))
     
-    # print(np.random.random() > 0.5)
-    # print(np.random.choice(np.arange(10)))
-    for curr_round in range(total_rounds):
-        # rewards = np.zeros(shape=(total_rounds, num_steps))
-        run_bandit(K, q_star, rewards, optim_acts_ratio, epsilon, num_steps, curr_round)
+    # Run the k-armed bandits alg.
+    for i, epsilon in enumerate(epsilons):
+        for curr_round in range(total_rounds):
+            run_bandit(K, q_star, rewards[i, curr_round], optim_acts_ratio[i, curr_round], epsilon, num_steps)
     
-    rewards = rewards.mean(axis=0)
-    optim_acts_ratio = optim_acts_ratio.mean(axis=0)
-    
-    plt.plot(optim_acts_ratio)
-    plt.show()
+    rewards = rewards.mean(axis=1)
+    optim_acts_ratio = optim_acts_ratio.mean(axis=1)
 
-    plt.plot(rewards)
-    plt.show()
+    record = {
+        'epsilons': epsilons, 
+        'rewards': rewards,
+        'optim_ratio': optim_acts_ratio
+    }
+
+    with open('./history/record.pkl', 'wb') as f:
+        pickle.dump(record, f)
