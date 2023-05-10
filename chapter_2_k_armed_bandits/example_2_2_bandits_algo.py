@@ -18,7 +18,8 @@ def get_argmax(G:np.array) -> int:
 
 
 # select arm and get the reward
-def bandit(q_star, act):
+def bandit(q_star:np.array, 
+           act:int) -> tuple:
     real_rewards = np.random.normal(q_star, 1.0)
     optim_choice = int(act == np.argmax(real_rewards))
     return real_rewards[act], optim_choice
@@ -60,7 +61,7 @@ if __name__ == "__main__":
     K = 10 # Number of arms
     epsilons = [0.0, 0.01, 0.1]
     num_steps = 1000
-    total_rounds = 2000
+    total_rounds = 10
 
     # Initialize the environment
     q_star = np.random.normal(loc=0, scale=1.0, size=K)
