@@ -10,10 +10,11 @@ def plot(data, legends, xlabel, ylabel, fn=lambda:None, filename=None):
     }
 
     plt.figure(figsize=(10, 6), dpi=150)
-    # plt.grid(c='lightgray')
+    plt.grid(c='lightgray')
     plt.margins(0.02)
-    for i, vals in enumerate(data):
-        plt.plot(vals, label=f"$\epsilon$={legends[i]}")
+    # revers the loop for a better visualization
+    for i in range(len(data)-1, -1, -1):
+        plt.plot(data[i], label=f"$\epsilon$={legends[i]}", linewidth=1.5)
 
         # get rid of the frame
     for i, spine in enumerate(plt.gca().spines.values()):
@@ -39,7 +40,7 @@ if __name__ == '__main__':
         history = pickle.load(f)
     epsilons = history['epsilons']
     rewards = history['rewards']
-    optim_ratio = history['optim_ratio'] * 100
+    optim_ratio = (history['optim_ratio'] * 100)
 
     plot(rewards, epsilons, 
          xlabel='Time step', 
@@ -47,7 +48,7 @@ if __name__ == '__main__':
          filename='example_2_2_rewards.png')
 
     # Set tick labels
-    fn = lambda: plt.yticks(np.arange(0, 70, 10), labels=[f'{val}%' for val in range(0, 65, 10)])
+    fn = lambda: plt.yticks(np.arange(0, 100, 10), labels=[f'{val}%' for val in range(0, 100, 10)])
     plot(optim_ratio, epsilons, 
          xlabel='Time step', 
          ylabel='% Optimal actions',
