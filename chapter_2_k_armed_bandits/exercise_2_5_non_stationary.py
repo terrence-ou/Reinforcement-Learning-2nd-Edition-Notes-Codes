@@ -7,7 +7,7 @@ from example_2_2_bandits_algo import bandit, get_argmax
 SEED = 200
 np.random.seed(SEED)
 
-# running the k-armed bandit algorithm
+# running the k-armed bandit algorithm on non-stationary environment
 def run_bandit_non_stationary(K:int, 
             q_star:np.array,
             rewards:np.array,
@@ -29,7 +29,6 @@ def run_bandit_non_stationary(K:int,
         # print(q_star)
         # get action
         A = None
-
         if np.random.random() > epsilon:
             A = get_argmax(Q)
         else:
