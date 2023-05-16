@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 
-from example_2_2_bandits_algo import bandit, get_argmax
+from utils import bandit, get_argmax
 
 SEED = 200
 np.random.seed(SEED)
@@ -59,7 +59,6 @@ if __name__ == "__main__":
     alpha = 0.1
 
     total_rounds = 2000
-    # num_steps = 10000
     num_steps = 10000
     methods = ['sample', 'weighted']
 
@@ -77,11 +76,12 @@ if __name__ == "__main__":
     
     rewards = rewards.mean(axis=1)
     optim_acts_ratio = optim_acts_ratio.mean(axis=1)
+
     # plt.plot(rewards, linewidth=1.0)
     # plt.show()
     
     record = {
-        'methods': methods,
+        'hyper_params': methods,
         'rewards': rewards,
         'optim_acts_ratio': optim_acts_ratio,
     }

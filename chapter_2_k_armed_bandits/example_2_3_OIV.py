@@ -7,16 +7,18 @@ from utils import get_argmax, bandit
 SEED = 200
 np.random.seed(SEED)
 
+
 # running the k-armed bandit algorithm
 def run_bandit(K:int, 
             q_star:np.array,
             rewards:np.array,
             optim_acts_ratio: np.array,
             epsilon: float, 
-            num_steps:int=1000) -> None:
+            num_steps:int=1000,
+            init_val: int=0) -> None:
     
     # Q = np.zeros(K) # The average action-value for each actions
-    Q = np.zeros(K)
+    Q = np.ones(K) * init_val
     N = np.zeros(K) # The number of times each action been selected    
     ttl_optim_acts = 0
 
@@ -42,7 +44,8 @@ if __name__ == "__main__":
 
     # Initializing the hyper-parameters
     K = 10 # Number of arms
-    epsilons = [0.0, 0.01, 0.1]
+    epsilons = [0.1, 0.0]
+    init_vals = [0.0, 5.0]
     # epsilons = [0.0, 0.1]
     num_steps = 1000
     total_rounds = 2000
@@ -53,26 +56,26 @@ if __name__ == "__main__":
     optim_acts_ratio = np.zeros(shape=(len(epsilons), total_rounds, num_steps))
     
     # Run the k-armed bandits alg.
-    for i, epsilon in enumerate(epsilons):
-        # ucb = 5 if epsilon == 0.0 else 0
+    for i, (epsilon, init_val) in enumerate(zip(epsilons, init_vals)):
         for curr_round in range(total_rounds):
             run_bandit(K, q_star, 
                        rewards[i, curr_round], 
                        optim_acts_ratio[i, curr_round], 
-                       epsilon, 
-                       num_steps)
+                       epsilon=epsilon, 
+                       num_steps=num_steps,
+                       init_val=init_val)
     
     rewards = rewards.mean(axis=1)
     optim_acts_ratio = optim_acts_ratio.mean(axis=1)
 
     record = {
-        'hyper_params': epsilons, 
+        'hyper_params': [epsilons, init_vals], 
         'rewards': rewards,
         'optim_acts_ratio': optim_acts_ratio
     }
 
-    # for ratio in optim_acts_ratio:
-    #     plt.plot(ratio)
+    # for vals in rewards:
+    #     plt.plot(vals)
     # plt.show()
-    with open('./history/record.pkl', 'wb') as f:
+    with open('./history/OIV_record.pkl', 'wb') as f:
         pickle.dump(record, f)
