@@ -53,6 +53,21 @@ def example_2_3(save_fig=False):
     plot_result(rewards, optim_ratio, legends, filenames)
 
 
+
+def example_2_4(save_fig=False):
+    with open(f'./history/UCB_record.pkl', 'rb') as f:
+        history = pickle.load(f)
+
+    meta = history['hyper_params']
+    rewards = history['rewards']
+    optim_ratio = (history['optim_acts_ratio'] * 100)
+    legends = [f'$\epsilon$-greedy $\epsilon$={meta["epsilon"]}', f'UCB c={meta["UCB"]}']
+    
+    filenames = ['example_2_4_rewards.png', 'example_2_4_optimal_ratio.png'] if save_fig else [None, None]
+    plot_result(rewards, optim_ratio, legends, filenames)
+
+
+
 def exercise_2_5(save_fig=False):
     with open(f'./history/non_stationary_record.pkl', 'rb') as f:
         history = pickle.load(f)
@@ -68,6 +83,7 @@ def exercise_2_5(save_fig=False):
 
 if __name__ == '__main__':
 
-    example_2_2(save_fig=True)
+    # example_2_2(save_fig=True)
     # example_2_3(save_fig=True)
+    example_2_4(save_fig=True)
     # exercise_2_5(save_fig=True)
