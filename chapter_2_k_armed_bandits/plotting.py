@@ -68,6 +68,6 @@ def exercise_2_5(save_fig=False):
 
 if __name__ == '__main__':
 
-    # example_2_2()
-    example_2_3(save_fig=True)
-    # exercise_2_5()
+    example_2_2(save_fig=True)
+    # example_2_3(save_fig=True)
+    # exercise_2_5(save_fig=True)

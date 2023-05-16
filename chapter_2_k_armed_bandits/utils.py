@@ -39,10 +39,12 @@ def plot(data:np.array,
     plt.figure(figsize=(10, 6), dpi=150)
     plt.grid(c='lightgray')
     plt.margins(0.02)
+
     # revers the loop for a better visualization
+    colors = ['cornflowerblue', 'tomato', 'lightseagreen']
     for i in range(len(data)-1, -1, -1):
-        # plt.plot(uniform_filter(data[i], 5), label=f"{legends[i]} method", linewidth=1.5)
-        plt.plot(data[i], label=legends[i], linewidth=1.5)
+        # data[i] = uniform_filter(data[i])
+        plt.plot(data[i], label=legends[i], linewidth=1.5, c=colors[i])
     
     # get rid of the top/right frame lines
     for i, spine in enumerate(plt.gca().spines.values()):
