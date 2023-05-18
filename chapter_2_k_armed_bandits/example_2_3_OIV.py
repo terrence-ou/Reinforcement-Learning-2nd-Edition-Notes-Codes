@@ -17,13 +17,11 @@ def run_bandit(K:int,
             num_steps:int=1000,
             init_val: int=0) -> None:
     
-    # Q = np.zeros(K) # The average action-value for each actions
-    Q = np.ones(K) * init_val
+    Q = np.ones(K) * init_val # Initial Q values with OIV
     N = np.zeros(K) # The number of times each action been selected    
     ttl_optim_acts = 0
 
     for i in range(num_steps):
-        # print(q_star)
         # get action
         A = None
         if np.random.random() > epsilon:
@@ -46,7 +44,6 @@ if __name__ == "__main__":
     K = 10 # Number of arms
     epsilons = [0.1, 0.0]
     init_vals = [0.0, 5.0]
-    # epsilons = [0.0, 0.1]
     num_steps = 1000
     total_rounds = 2000
 

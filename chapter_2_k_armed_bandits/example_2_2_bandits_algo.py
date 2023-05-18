@@ -15,13 +15,11 @@ def run_bandit(K:int,
             epsilon: float, 
             num_steps:int=1000) -> None:
     
-    # Q = np.zeros(K) # The average action-value for each actions
-    Q = np.zeros(K)
+    Q = np.zeros(K) # Initialize Q values
     N = np.zeros(K) # The number of times each action been selected    
     ttl_optim_acts = 0
 
     for i in range(num_steps):
-        # print(q_star)
         # get action
         A = None
         if np.random.random() > epsilon:
@@ -43,7 +41,6 @@ if __name__ == "__main__":
     # Initializing the hyper-parameters
     K = 10 # Number of arms
     epsilons = [0.0, 0.01, 0.1]
-    # epsilons = [0.0, 0.1]
     num_steps = 1000
     total_rounds = 2000
 
@@ -54,7 +51,6 @@ if __name__ == "__main__":
     
     # Run the k-armed bandits alg.
     for i, epsilon in enumerate(epsilons):
-        # ucb = 5 if epsilon == 0.0 else 0
         for curr_round in range(total_rounds):
             run_bandit(K, q_star, 
                        rewards[i, curr_round], 

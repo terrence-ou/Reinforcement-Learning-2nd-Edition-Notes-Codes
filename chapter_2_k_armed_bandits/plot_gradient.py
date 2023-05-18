@@ -72,4 +72,5 @@ if __name__ == "__main__":
     optim_ratio = history['optim_acts_ratio'] * 100
     hyper_params = history['hyper_params']
     
-    plot_result(optim_ratio, hyper_params, output_name="example_2_5_sga.png")
+    # plot_result(optim_ratio, hyper_params, output_name="example_2_5_sga.png")
+    plot_result(optim_ratio, hyper_params, output_name=None)

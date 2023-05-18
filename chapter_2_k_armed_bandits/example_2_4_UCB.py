@@ -7,7 +7,6 @@ from utils import get_argmax, bandit
 SEED = 200
 np.random.seed(SEED)
 
-
 # running the k-armed bandit algorithm
 def run_bandit(K:int, 
             q_star:np.array,

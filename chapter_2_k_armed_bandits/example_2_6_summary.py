@@ -88,7 +88,7 @@ if __name__ == "__main__":
     gd_args['baseline'] = True
 
     gd_rewards = run_algorithm('gradient', gradient, fn_params, gd_args, total_rounds)
-    records['gradient'] = history[gd_bounds, gd_rewards]
+    records['gradient'] = history(gd_bounds, gd_rewards)
 
 
     # ======== OIV ========
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     oiv_args = base_args.copy()
     oiv_args['epsilon'] = 0.1
     oiv_rewards = run_algorithm('oiv', OIV, fn_params, oiv_args, total_rounds)
-    records['oiv'] = history[oiv_bounds, oiv_rewards]
+    records['oiv'] = history(oiv_bounds, oiv_rewards)
 
 
     with open('./history/summary.pkl', 'wb') as f:
