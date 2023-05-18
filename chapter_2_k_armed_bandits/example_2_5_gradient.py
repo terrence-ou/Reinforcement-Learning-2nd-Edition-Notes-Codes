@@ -5,7 +5,7 @@ import itertools
 
 from utils import bandit
 
-SEED = 200
+SEED = 50
 np.random.seed(SEED)
 
 def update_policy(H:np.array) -> np.array:
@@ -28,6 +28,7 @@ def run_bandit(K:int,
             rewards:np.array,
             optim_acts_ratio: np.array,
             alpha: float,
+            baseline:bool,
             num_steps:int=1000) -> None:
     
     H = np.zeros(K, dtype=np.float32) # initialize preference 
@@ -37,10 +38,14 @@ def run_bandit(K:int,
     
     for i in range(num_steps):
 
-        A = np.random.choice(K, p=policy)
+        A = np.random.choice(np.arange(K), p=policy)
         reward, is_optim = bandit(q_star, A)
-        # Get average reward unitl timestep=i
-        avg_reward = ttl_reward / i if i > 0 else reward
+        avg_reward = 0
+
+        if baseline:
+            # Get average reward unitl timestep=i
+            avg_reward = ttl_reward / i if i > 0 else reward
+
         # Update preference and policy
         H = update_H(H, policy, alpha, A, reward, avg_reward)
         policy = update_policy(H)
@@ -55,25 +60,26 @@ if __name__ == "__main__":
 
     # Initializing the hyper-parameters
     K = 10 # Number of arms
-    alpha = [0.1, 0.4]
-    baseline = [0.0, 4.0]
-    hyper_params = list(itertools.product(baseline, alpha))
+    alphas = [0.1, 0.4]
+    baselines = [False, True]
+    hyper_params = list(itertools.product(baselines, alphas))
     
     num_steps = 1000
     total_rounds = 2000
 
     rewards = np.zeros(shape=(len(hyper_params), total_rounds, num_steps))
     optim_acts_ratio = np.zeros(shape=(len(hyper_params), total_rounds, num_steps))
+    q_star = np.random.normal(loc=4.0, scale=1.0, size=K)
 
-    for i, (b, a) in enumerate(hyper_params):
-        # Initialize the environment
-        q_star = np.random.normal(loc=b, scale=1.0, size=K)
+    print(hyper_params)
+    for i, (is_baseline, alpha) in enumerate(hyper_params):
         for curr_round in range(total_rounds):
             run_bandit(K, 
                     q_star, 
                     rewards[i, curr_round], 
                     optim_acts_ratio[i, curr_round],
-                    a,
+                    alpha,
+                    is_baseline,
                     num_steps)
     
     optim_acts_ratio = optim_acts_ratio.mean(axis=1)
@@ -87,7 +93,7 @@ if __name__ == "__main__":
         'optim_acts_ratio': optim_acts_ratio
     }
 
-    with open('./history/bandit_record.pkl', 'wb') as f:
+    with open('./history/sga_record.pkl', 'wb') as f:
         pickle.dump(record, f)
 
 
