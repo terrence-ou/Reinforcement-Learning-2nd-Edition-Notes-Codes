@@ -16,8 +16,8 @@ My work mainly consists of:<br/>
 
 ## **Snapshot of chapters**:
 ---
-### **Chapter 2: Multi-armed Bandits** :link: [link](/chapter_2_k_armed_bandits/)
-This chapter starts with bandit algorithm and introduces strategies like $\varepsilon$-greedy, Upper-Confidence-Bound, and Gradient Bandit to improve the the algorithm's performance.
+### **Chapter 2: Multi-armed Bandits** &nbsp; &nbsp; :link: [link](/chapter_2_k_armed_bandits/)
+ This chapter starts with bandit algorithm and introduces strategies like $\varepsilon$-greedy, Upper-Confidence-Bound, and Gradient Bandit to improve the the algorithm's performance.
 - A k-armed bandit testbed:
 <p align='center'>
     <img src='./chapter_2_k_armed_bandits/plots/example_2_1.png' width=65%>
@@ -29,7 +29,7 @@ This chapter starts with bandit algorithm and introduces strategies like $\varep
 </p>
 
 ---
-### **Chapter 3: Finite Markov Decision Process** :link: [link](/chapter_3_finite_MDP/)
+### **Chapter 3: Finite Markov Decision Process** &nbsp; &nbsp; :link: [link](/chapter_3_finite_MDP/)
 This chapter introduces the fundamentals of the Markov Decision Process in finite states like agent-environment interaction, goals and rewards, returns and episodes, and policy and value function. It helps to build up a basic understanding of the components of reinforcement learning.
 - Optimal solution to the `gridworld` example:
 <div align='center'>
