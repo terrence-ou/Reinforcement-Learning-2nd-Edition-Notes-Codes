@@ -1,4 +1,4 @@
-# Reinforcement Learning 2nd Edition - Notes and code implementations
+# Reinforcement Learning 2nd Edition - Notes and Codes
 
 *Reinforcement Learning - An Introduction, 2nd Edition*, written by Richard S. Sutton and Andrew G. Barto, is kind of bible of reinforcement learning. It is a required reading for students and researchers to get the appropriate context of the keep developing field of RL and AI. <br/>
 
