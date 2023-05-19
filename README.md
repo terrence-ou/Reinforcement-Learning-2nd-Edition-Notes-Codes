@@ -7,7 +7,7 @@ Links to get or rent a hardcover or ebook: [MIT Press](https://mitpress.mit.edu/
 ### **Motivation of this project:**
 Although the authors have made the book extremely clear and friendly to readers at each level, this book is honestly still intimidating to RL or ML beginners because of the intense concepts, abstract examples and algorithms, and its volume. Therefore, as an RL researcher, I'm trying to extract key points and implement examples as well as exercises in the book to help more people better understand the valuable knowledge the book generously provides.<br/>
 My work mainly consists of:<br/>
-- Turning examples into code and plots that are as similar to that of in the book as possible;
+- Turning examples into code and plots that are as close to that of in the book as possible;
 - Writing out algorithms in `Python` and testing them with RL playground packages like [`Gymnasium`](https://gymnasium.farama.org/);
 - Take notes and organize them as PDF files per chapter.
 
@@ -16,19 +16,28 @@ My work mainly consists of:<br/>
 
 ## **Snapshot of chapters**:
 ---
-### **Chapter 2: Multi-armed Bandits**
+### **Chapter 2: Multi-armed Bandits** :link: [link](/chapter_2_k_armed_bandits/)
 This chapter starts with bandit algorithm and introduces strategies like $\varepsilon$-greedy, Upper-Confidence-Bound, and Gradient Bandit to improve the the algorithm's performance.
 - A k-armed bandit testbed:
-<br/>
 <p align='center'>
-    <img src='./chapter_2_k_armed_bandits/plots/example_2_1.png' width=70%>
+    <img src='./chapter_2_k_armed_bandits/plots/example_2_1.png' width=65%>
 </p>
 
 - Parameter study (algorithm comparison) - stationary environment
 <p align='center'>
-    <img src='./chapter_2_k_armed_bandits/plots/example_2_6_summary.png' width=70%>
+    <img src='./chapter_2_k_armed_bandits/plots/example_2_6_summary.png' width=65%>
 </p>
 
 ---
-Chapter 3:
+### **Chapter 3: Finite Markov Decision Process** :link: [link](/chapter_3_finite_MDP/)
+This chapter introduces the fundamentals of the Markov Decision Process in finite states like agent-environment interaction, goals and rewards, returns and episodes, and policy and value function. It helps to build up a basic understanding of the components of reinforcement learning.
+- Optimal solution to the `gridworld` example:
+<div align='center'>
+    <img src='./chapter_3_finite_MDP/plots/example_3_8/optimal_values.png' width=35%>
+    <img src='./chapter_3_finite_MDP/plots/example_3_8/optimal_actions.png' width=35%>
+</div>
 
+---
+
+### **Chapter 4: Dynamic Programming**
+ *In Progress*
