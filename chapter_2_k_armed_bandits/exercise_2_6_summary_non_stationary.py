@@ -5,9 +5,8 @@ import pickle
 
 from tqdm import tqdm
 
-from example_2_3_OIV import run_bandit as OIV
-
-
+SEED = 200
+np.random.seed(SEED)
 
 ######################################################################
 #                         HELPER FUNCTIONS                           #
@@ -183,7 +182,6 @@ def OIV_non_stationary(K:int,
             init_val: int=0) -> None:
     
     Q = np.ones(K) * init_val # Initial Q values with OIV
-    # N = np.zeros(K) # The number of times each action been selected    
     ttl_optim_acts = 0
 
     q_star_temp = np.copy(q_star)
@@ -197,8 +195,6 @@ def OIV_non_stationary(K:int,
             A = np.random.randint(0, K)
         
         R, is_optim = bandit(q_star_temp, A)
-        # N[A] += 1
-        # Q[A] += (R - Q[A]) / N[A]
         Q[A] += alpha * (R - Q[A])
 
         ttl_optim_acts += is_optim
@@ -211,9 +207,9 @@ def OIV_non_stationary(K:int,
         q_star_temp += q_steps
 
 
-
-SEED = 200
-np.random.seed(SEED)
+######################################################################
+#                         Wrapper Function                           #
+######################################################################
 
 # A wraper function for running differen algorithms
 def run_algorithm(fn_name:str,
@@ -260,7 +256,7 @@ if __name__ == "__main__":
     params *= multiplier
     x_labels = ['1/128', '1/64', '1/32', '1/16', '1/8', '1/4', '1/2', '1', '2', '4']
 
-    # Creating a dict to record running histories
+    # Creating a dict to keep track on running records
     records = {'params': params,
                'x_labels': x_labels}
     history = namedtuple('history', ['bounds', 'data'])
@@ -282,8 +278,6 @@ if __name__ == "__main__":
 
     eps_rewards = run_algorithm('e_greedy', e_greedy_non_stationary, fn_params, eps_args, total_rounds)
     records['e_greedy'] = history(eps_bounds, eps_rewards)
-
-
     # plt.plot(np.arange(eps_bounds[0], eps_bounds[1]), eps_rewards)
 
 
@@ -297,7 +291,6 @@ if __name__ == "__main__":
     
     ucb_rewards = run_algorithm('ucb', UCB_non_stationary, fn_params, ucb_args, total_rounds)
     records['ucb'] = history(ucb_bounds, ucb_rewards)
-
     # plt.plot(np.arange(ucb_bounds[0], ucb_bounds[1]), ucb_rewards)
 
 
@@ -323,9 +316,9 @@ if __name__ == "__main__":
     oiv_args['alpha'] = 0.1
     oiv_rewards = run_algorithm('oiv', OIV_non_stationary, fn_params, oiv_args, total_rounds)
     records['oiv'] = history(oiv_bounds, oiv_rewards)
-
     # plt.plot(np.arange(oiv_bounds[0], oiv_bounds[1]), oiv_rewards)
 
+    # save histories
     with open('./history/exercise_2_6.pkl', 'wb') as f:
         pickle.dump(records, f)
 
