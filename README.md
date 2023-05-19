@@ -1,2 +1,34 @@
-# Reinforcement-Learning-2nd-Edition-Notes-Examples
-The notes and the implementation of examples and algorithms
+# Reinforcement Learning 2nd Edition - Notes and code implementations
+
+*Reinforcement Learning - An Introduction, 2nd Edition*, written by Richard S. Sutton and Andrew G. Barto, is kind of bible of reinforcement learning. It is a required reading for students and researchers to get the appropriate context of the keep developing field of RL and AI. <br/>
+
+Links to get or rent a hardcover or ebook: [MIT Press](https://mitpress.mit.edu/9780262039246/reinforcement-learning/), [Amazon](https://www.amazon.com/Reinforcement-Learning-Introduction-Adaptive-Computation/dp/0262039249/ref=sr_1_4?keywords=reinforcement+learning+an+introduction&qid=1684469272&sprefix=reinforcement+le%2Caps%2C82&sr=8-4&ufe=app_do%3Aamzn1.fos.006c50ae-5d4c-4777-9bc0-4513d670b6bc) (Paperback version if generally not recommended because the poor printing quality).<br/>
+
+### **Motivation of this project:**
+Although the authors have made the book extremely clear and friendly to readers at each level, this book is honestly still intimidating to RL or ML beginners because of the intense concepts, abstract examples and algorithms, and its volume. Therefore, as an RL researcher, I'm trying to extract key points and implement examples as well as exercises in the book to help more people better understand the valuable knowledge the book generously provides.<br/>
+My work mainly consists of:<br/>
+- Turning examples into code and plots that are as similar to that of in the book as possible;
+- Writing out algorithms in `Python` and testing them with RL playground packages like [`Gymnasium`](https://gymnasium.farama.org/);
+- Take notes and organize them as PDF files per chapter.
+
+<br/>
+<br/>
+
+## **Snapshot of chapters**:
+---
+### **Chapter 2: Multi-armed Bandits**
+This chapter starts with bandit algorithm and introduces strategies like $\varepsilon$-greedy, Upper-Confidence-Bound, and Gradient Bandit to improve the the algorithm's performance.
+- A k-armed bandit testbed:
+<br/>
+<p align='center'>
+    <img src='./chapter_2_k_armed_bandits/plots/example_2_1.png' width=70%>
+</p>
+
+- Parameter study (algorithm comparison) - stationary environment
+<p align='center'>
+    <img src='./chapter_2_k_armed_bandits/plots/example_2_6_summary.png' width=70%>
+</p>
+
+---
+Chapter 3:
+
