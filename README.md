@@ -6,12 +6,11 @@ Links to get or rent a hardcover or ebook: [MIT Press](https://mitpress.mit.edu/
 
 ### **Motivation of this project:**
 Although the authors have made the book extremely clear and friendly to readers at each level, this book is honestly still intimidating to RL or ML beginners because of the intense concepts, abstract examples and algorithms, and its volume. Therefore, as an RL researcher, I'm trying to extract key points and implement examples as well as exercises in the book to help more people better understand the valuable knowledge the book generously provides.<br/>
+<br/>
 My work mainly consists of:<br/>
 - Turning examples into code and plots that are as close to that of in the book as possible;
-- Writing out algorithms in `Python` and testing them with RL playground packages like [`Gymnasium`](https://gymnasium.farama.org/);
+- Implementing algorithms in `Python` and testing them with RL playground packages like [`Gymnasium`](https://gymnasium.farama.org/);
 - Take notes and organize them as PDF files per chapter.
-
-<br/>
 <br/>
 
 ## **Snapshot of chapters**:
