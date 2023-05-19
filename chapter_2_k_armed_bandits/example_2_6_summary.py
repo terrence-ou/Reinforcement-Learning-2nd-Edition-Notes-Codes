@@ -95,7 +95,7 @@ if __name__ == "__main__":
     oiv_bounds = [5, 10]
     fn_params = params[oiv_bounds[0]:oiv_bounds[1]]
     oiv_args = base_args.copy()
-    oiv_args['epsilon'] = 0.1
+    oiv_args['epsilon'] = 0.0
     oiv_rewards = run_algorithm('oiv', OIV, fn_params, oiv_args, total_rounds)
     records['oiv'] = history(oiv_bounds, oiv_rewards)
 

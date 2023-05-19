@@ -18,8 +18,8 @@ def run_bandit(K:int,
             init_val: int=0) -> None:
     
     Q = np.ones(K) * init_val # Initial Q values with OIV
-    N = np.zeros(K) # The number of times each action been selected    
     ttl_optim_acts = 0
+    alpha = 0.1
 
     for i in range(num_steps):
         # get action
@@ -30,8 +30,7 @@ def run_bandit(K:int,
             A = np.random.randint(0, K)
         
         R, is_optim = bandit(q_star, A)
-        N[A] += 1
-        Q[A] += (R - Q[A]) / N[A]
+        Q[A] += alpha * (R - Q[A])
 
         ttl_optim_acts += is_optim
         rewards[i] = R

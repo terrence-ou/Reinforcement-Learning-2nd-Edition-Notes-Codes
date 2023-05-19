@@ -10,18 +10,18 @@ algos = ['e_greedy', 'gradient', 'ucb', 'oiv']
 
 if __name__ == '__main__':
 
-    # with open('./history/summary.pkl', 'rb') as f:
-    #     histories = pickle.load(f)
-    #     coords = [[0.95, 1.55], [6.5, 1.45], [3, 1.82], [7.5, 1.58]]
-    #     legend_loc = 2
-    #     filename='./plots/example_2_6_summary.png'
-
-
-    with open('./history/exercise_2_6.pkl', 'rb') as f:
+    with open('./history/summary.pkl', 'rb') as f:
         histories = pickle.load(f)
-        coords = [[2.5, 6.0], [7.0, 3.5], [7.5, 5.0], [6.5, 5.7]]
-        legend_loc = 0
-        filename = './plots/exercise_2_6.png'
+        coords = [[0.95, 1.55], [6.5, 1.45], [3, 1.82], [8.5, 1.82]]
+        legend_loc = 2
+        filename='./plots/example_2_6_summary.png'
+
+
+    # with open('./history/exercise_2_6.pkl', 'rb') as f:
+    #     histories = pickle.load(f)
+    #     coords = [[2.5, 6.0], [7.0, 3.5], [7.5, 5.0], [6.5, 5.7]]
+    #     legend_loc = 0
+    #     filename = './plots/exercise_2_6.png'
 
     x_ticks = histories['x_labels']    
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     plt.text(*coords[0], '$\epsilon$-greedy', c=colors[0], fontsize=12)
     plt.text(*coords[1], 'gradient\nbandit', c=colors[1], fontsize=12, horizontalalignment='center')
     plt.text(*coords[2], 'UCB', c=colors[2], fontsize=12)
-    plt.text(*coords[3], 'greedy with\noptimistic\ninitializatio\n$\epsilon=0.1$', c=colors[3], fontsize=12, horizontalalignment='center')
+    plt.text(*coords[3], 'greedy with\noptimistic\ninitializatio\n$\\alpha=0.1$', c=colors[3], fontsize=12, horizontalalignment='center')
 
     # plt.show()
     plt.savefig(filename)
