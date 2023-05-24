@@ -23,6 +23,7 @@ def get_reward(state:tuple, act: tuple):
 
     return 0, (next_row, next_col)
 
+
 # value function
 def value_update(grid_world:np.array):
     '''
@@ -36,6 +37,7 @@ def value_update(grid_world:np.array):
                 next_value = grid_world[next_state]
                 curr_value += 0.25 * (reward + gamma * next_value)
             grid_world[row, col] = curr_value
+
 
 # plot the value table
 def plot_grid(grid_world:np.array, iteration:int=0):
