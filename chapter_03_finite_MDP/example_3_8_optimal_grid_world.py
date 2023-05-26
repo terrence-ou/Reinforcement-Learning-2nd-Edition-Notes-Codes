@@ -25,7 +25,8 @@ def get_reward(state:tuple, act:tuple):
 
 
 # value function
-def value_update(grid_world:np.array, actions:int):
+def value_update(grid_world:np.array, 
+                 actions:list):
     '''
     grid_world: the 5x5 grid world map, numpy array
     '''
