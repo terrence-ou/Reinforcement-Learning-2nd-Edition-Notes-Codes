@@ -14,7 +14,6 @@ My work mainly consists of:<br/>
 <br/>
 
 ## **Snapshot of chapters**:
----
 ### **Chapter 2: Multi-armed Bandits** &nbsp; &nbsp; :link: [link](/chapter_02_k_armed_bandits/)
  This chapter starts with bandit algorithm and introduces strategies like $\varepsilon$-greedy, Upper-Confidence-Bound, and Gradient Bandit to improve the the algorithm's performance.
 - A k-armed bandit testbed:
