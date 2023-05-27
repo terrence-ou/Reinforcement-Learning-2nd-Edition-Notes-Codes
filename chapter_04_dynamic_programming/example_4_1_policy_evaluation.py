@@ -7,7 +7,6 @@ def env_step(state:tuple,
                act:tuple) -> tuple:
 
     assert state not in [(0, 0), (3, 3)], "Terminal states should be selected"
-    
     next_row = state[0] + act[0]
     next_col = state[1] + act[1]
 
@@ -59,7 +58,7 @@ def greedy_policy(grid_world:np.array,
     for row in range(4):
         acts_row = []
         for col in range(4):
-            
+            # Skip terminal states
             if (row, col) in terminal_states: 
                 acts_row.append('')
                 continue
@@ -69,6 +68,7 @@ def greedy_policy(grid_world:np.array,
                 next_value = grid_world[next_state]
                 Q[row, col, i] = probs[i] * (reward + gamma * next_value)
             
+            # include all poosible actions
             greedy_sels = np.where(np.abs(Q[row, col] - Q[row, col].max()) < 0.0001)[0]
             acts = "".join([chr(act_list[i]) for i in greedy_sels])
             acts_row.append(acts)
@@ -84,8 +84,11 @@ def plot_heatmap(data:np.ndarray,
                 curr_row:int) -> None:
         
         assert len(data.shape) == 2, 'Input must be a 2-D array'
-        ax_val = axes[curr_row, 0]
-        ax_act = axes[curr_row, 1]
+        ax_val = axes[curr_row, 0] # value axis
+        ax_act = axes[curr_row, 1] # action axis
+        
+        title = f'k={curr_row}' if curr_row != -1 else 'k=$\infty$'
+        
         # Plot values
         sns.heatmap(data, 
                 ax=ax_val,
@@ -96,8 +99,9 @@ def plot_heatmap(data:np.ndarray,
                 linewidths=0.5)
         ax_val.set_yticks([])
         ax_val.set_xticks([])
-        ax_val.set_title(f'k={curr_row}')
+        ax_val.set_title(title, fontweight='bold')
 
+        # Plot actions
         sns.heatmap(data, 
             ax=ax_act,
             cbar=False,
@@ -107,7 +111,7 @@ def plot_heatmap(data:np.ndarray,
             linewidths=0.5)
         ax_act.set_yticks([])
         ax_act.set_xticks([])
-        ax_act.set_title('test')
+        ax_act.set_title(title, fontweight='bold')
 
 
 
@@ -115,7 +119,7 @@ if __name__ == '__main__':
     # Initialize the grid world
     actions = [(0, -1), (1, 0), (0, 1), (-1, 0)]
     grid_world = np.zeros(shape=(4, 4))
-    gamma = 1.0
+    gamma = 1.0 # Normally gamma should be between (0, 1)
     theta = 0.001
 
     # random policy with eqaul probability on each action
@@ -123,12 +127,12 @@ if __name__ == '__main__':
     terminal_states = [(0, 0), (3, 3)]
 
     # store values in the record for plotting
-    fig, axes = plt.subplots(6, 2, figsize=(3, 10))
-    # print(axes)
+    fig, axes = plt.subplots(6, 2, figsize=(5, 16), dpi=150)
     curr_row = 0
     # Loop until delta is smaller than theta
     for i in range(1000):
 
+        # plot value and policy in given timestep
         if i in [0, 1, 2, 3, 10]:
             greedy_acts = greedy_policy(grid_world, 
                                         actions, 
@@ -137,9 +141,8 @@ if __name__ == '__main__':
                                         terminal_states)
             plot_heatmap(grid_world, greedy_acts, axes, curr_row)
             curr_row += 1
-            
 
-        delta = 0
+        delta = 0 # reset delta
         grid_world,delta = policy_evaluation(
                             grid_world, 
                             actions, 
@@ -149,8 +152,8 @@ if __name__ == '__main__':
                             terminal_states)
         
         if delta < theta: break
-    
 
+    # get greedy policy when converged
     greedy_acts = greedy_policy(grid_world, 
                                 actions, 
                                 probs, 
@@ -158,6 +161,6 @@ if __name__ == '__main__':
                                 terminal_states)
     
     plot_heatmap(grid_world, greedy_acts, axes, -1)
-    
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('./plots/example_4_1.png')
