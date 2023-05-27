@@ -58,7 +58,7 @@ def value_update(grid_world:np.array,
 
 
 # plot the value table
-def plot_grid(grid_world:np.array, annot:int=None):
+def plot_grid(grid_world:np.array, annot=None):
     annot_kwargs = {
         'fontsize': '18',
         # 'fontweight': 'bold'
