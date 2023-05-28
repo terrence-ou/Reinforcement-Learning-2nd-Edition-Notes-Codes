@@ -6,6 +6,9 @@ Still in-progress
 import numpy as np
 from scipy.stats import poisson
 
+
+from matplotlib import pyplot as plt
+import seaborn as sns
 """
 Environment Parameters
 """
@@ -37,12 +40,23 @@ Helper functions
 def get_request_transitions_for_one_location(loc):
     assert (loc == A or loc == B)
 
+    transition_matrix = np.zeros(shape=(MAX_CAPACITY+1, MAX_CAPACITY+1))
+    # Get poisson distribution
+    request_pmf = poisson.pmf(np.arange(MAX_PMF), REQUEST_RATE[loc])
+    # Checking if the last pmf is 0
+    np.testing.assert_almost_equal(request_pmf[-1], 0., decimal=12)
 
-
-
-
-
+    for i in range(MAX_CAPACITY + 1):
+        for j in range(MAX_CAPACITY + 1):
+            if j == 0:
+                transition_matrix[i, j] = request_pmf[i:].sum()
+            elif j <= i:
+                transition_matrix[i, j] = request_pmf[i - j]
+    
+    return transition_matrix.T
 
 
 if __name__ == '__main__':
-    get_request_transitions_for_one_location(0)
+    tran = get_request_transitions_for_one_location(0)
+    sns.heatmap(tran)
+    plt.show()
