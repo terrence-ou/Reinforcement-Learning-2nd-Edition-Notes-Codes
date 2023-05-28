@@ -7,3 +7,10 @@ Convergence of iterative policy evaluation on a small gridworld. The last policy
 <p align="center">
     <img src='./plots/example_4_1.png' width=50%>
 </p>
+
+### 4.2 Jack's Car Rental (*p.81*)
+**Important:** Before running this example, be sure to first install the Jack's Car Rental environment by:
+```bash
+cd gym_env
+pip install .
+```

@@ -161,9 +161,25 @@ def create_R_matrix():
         for i in range(MAX_CAPACITY + 1):
             poisson_mask[loc, i, :i] = po[loc][:i]
             poisson_mask[loc, i, i] = po[loc][i:].sum()
+    # The poisson mask contains the probability distribution for renting x cars (x column)
+    # in each row j, with j the number of cars available at the location
+
+    reward = np.zeros(shape=(MAX_CAPACITY + 1, MAX_CAPACITY + 1, 2 * TRANSFER_MAX + 1))
+    for a in range(MAX_CAPACITY + 1):
+        for b in range(MAX_CAPACITY + 1):
+            for action in range(-TRANSFER_MAX, TRANSFER_MAX + 1):
+                moved_cars = min(action, a) if action >= 0 else max(action, -b)
+                a_ = a - moved_cars
+                a_ = min(MAX_CAPACITY, max(0, a_))
+                b_ = b + moved_cars
+                b_ = min(MAX_CAPACITY, max(0, b_))
+                reward_a = np.dot(poisson_mask[A, a_], np.arange(MAX_CAPACITY + 1))
+                reward_b = np.dot(poisson_mask[B, b_], np.arange(MAX_CAPACITY + 1))
+                reward[a, b, action + TRANSFER_MAX] = (
+                    (reward_a + reward_b) * RENTAL_INCOME - np.abs(action) * TRANSFER_COST)
+    
+    reward = reward.reshape(441, 11)
+    return reward
 
 # if __name__ == '__main__':
-
-#     trans = create_P_matrix()
-#     sns.heatmap(trans.sum(axis=-1))
-#     plt.show()
+#     print(create_R_matrix().shape)
