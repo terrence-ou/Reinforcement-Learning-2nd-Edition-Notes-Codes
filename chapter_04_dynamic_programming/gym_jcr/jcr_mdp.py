@@ -97,6 +97,7 @@ def get_return_transition_matrix_one_location(loc):
     
     return transition_matrix.T
 
+
 # Moving cars between a and b with an action from action space
 def get_moves(a, b, action):
     if action > 0: # from A to B
@@ -104,16 +105,65 @@ def get_moves(a, b, action):
     else:
         return max(-b, action)
 
+
 # Get transition matrix of moves at night
 def get_nightly_moves():
-    pass
+    full_cases = (MAX_CAPACITY + 1) ** 2
+    transition_matrix = np.zeros(shape=(full_cases, full_cases, action_space.shape[0]))
+    for a in range(MAX_CAPACITY + 1):
+        for b in range(MAX_CAPACITY + 1):
+            for i, action in enumerate(action_space):
+                old_state_index = a * (MAX_CAPACITY + 1) + b
+                moves = get_moves(a, b, action)
+                new_a = min(a - moves, MAX_CAPACITY)
+                new_b = min(b + moves, MAX_CAPACITY)
+                new_state_index = new_a * (MAX_CAPACITY + 1) + new_b
+                transition_matrix[new_state_index, old_state_index, i] = 1.
+    return transition_matrix
 
 
+# Create transition probability matrix
+def create_P_matrix():
+    # Request matrix
+    P_request_A_one_loc = get_request_transitions_for_one_location(A)
+    P_request_A = full_transition_matrix_A(P_request_A_one_loc)
+    P_request_B_one_loc = get_request_transitions_for_one_location(B)
+    P_request_B = full_transition_matrix_B(P_request_B_one_loc)
+
+    P_request = np.dot(P_request_A, P_request_B)
+
+    # Return matrix
+    P_return_A_one_loc = get_return_transition_matrix_one_location(A)
+    P_return_A = full_transition_matrix_A(P_return_A_one_loc)
+    P_return_B_one_loc = get_return_transition_matrix_one_location(B)
+    P_return_B = full_transition_matrix_A(P_return_B_one_loc)
+
+    P_return = np.dot(P_return_A, P_return_B)
+
+    P_return_request = np.dot(P_return, P_request)
+
+    # Nightly move matrix
+    P_move = get_nightly_moves()
+    P = np.ndarray(shape = ((MAX_CAPACITY + 1) ** 2, (MAX_CAPACITY + 1) ** 2, action_space.shape[0]))
+
+    for i in range(action_space.shape[0]):
+        P[:, :, i] = np.dot(P_return_request, P_move[:, :, i])
+
+    return P
 
 
-if __name__ == '__main__':
-    trans_one_loc = get_return_transition_matrix_one_location(0)
-    # trans_one_loc = get_request_transitions_for_one_location(0)
-    # trans = full_transition_matrix_A(trans_one_loc)
-    sns.heatmap(trans_one_loc)
-    plt.show()
+# Create reward matrix
+def create_R_matrix():
+    poisson_mask = np.zeros(shape=(2, MAX_CAPACITY + 1, MAX_CAPACITY + 1))
+    po = (poisson.pmf(np.arange(MAX_CAPACITY + 1), REQUEST_RATE[A]),
+          poisson.pmf(np.arange(MAX_CAPACITY + 1), REQUEST_RATE[B]))
+    for loc in (A, B):
+        for i in range(MAX_CAPACITY + 1):
+            poisson_mask[loc, i, :i] = po[loc][:i]
+            poisson_mask[loc, i, i] = po[loc][i:].sum()
+
+# if __name__ == '__main__':
+
+#     trans = create_P_matrix()
+#     sns.heatmap(trans.sum(axis=-1))
+#     plt.show()
