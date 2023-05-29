@@ -181,5 +181,82 @@ def create_R_matrix():
     reward = reward.reshape(441, 11)
     return reward
 
-# if __name__ == '__main__':
-#     print(create_R_matrix().shape)
+
+
+
+# Function tests
+if __name__ == '__main__':
+    
+    state_ = np.zeros([MAX_CAPACITY+1, MAX_CAPACITY+1])
+    state_[11, 15] = 1. # 11 cars at A and 15 cars at B
+    state_11_15 = state_.reshape(-1)
+    print('\nTesting functions: ')
+
+
+    #  ===== Function test: get_request_transitions_for_one_location =====
+    P_request_A_one_loc = get_request_transitions_for_one_location(A)
+    # all colums should sum to one
+    np.testing.assert_allclose(P_request_A_one_loc.sum(axis=0), 1.)
+    print('[PASSED]: get_request_transitions_for_one_location')
+
+
+    #  ===== Function test: full_transition_matrix_A =====
+    P_request_A = full_transition_matrix_A(P_request_A_one_loc)
+    np.testing.assert_almost_equal(np.dot(P_request_A, state_11_15).reshape(MAX_CAPACITY+1,-1).sum(), 1.)
+    np.testing.assert_almost_equal(np.dot(P_request_A, state_11_15).reshape(MAX_CAPACITY+1,-1)[:,15].sum(), 1.)
+    np.testing.assert_almost_equal(np.dot(P_request_A, state_11_15).reshape(MAX_CAPACITY+1,-1)[:12,15].sum(), 1.)
+    print('[PASSED]: full_transition_matrix_A')
+
+
+    #  ===== Function test: full_transition_matrix_B =====
+    P_request_B_one_loc = get_request_transitions_for_one_location(1)
+    P_request_B = full_transition_matrix_B(P_request_B_one_loc)
+    np.testing.assert_almost_equal(np.dot(P_request_B, state_11_15).reshape(MAX_CAPACITY+1,-1).sum(), 1.)
+    np.testing.assert_almost_equal(np.dot(P_request_B, state_11_15).reshape(MAX_CAPACITY+1,-1)[11].sum(), 1.)
+    np.testing.assert_almost_equal(np.dot(P_request_B, state_11_15).reshape(MAX_CAPACITY+1,-1)[11,:16].sum(), 1.)
+    print('[PASSED]: full_transition_matrix_B')
+
+
+    #  ===== Function test: get_return_transitions_for_one_location =====
+    P_return_A_one_loc = get_return_transition_matrix_one_location(A)
+    np.testing.assert_almost_equal(P_return_A_one_loc.sum(axis=0), 1.)
+    P_return_A = full_transition_matrix_A(P_return_A_one_loc)
+
+    # should mix only states of A: 
+    np.testing.assert_almost_equal(np.dot(P_return_A, state_11_15).reshape(MAX_CAPACITY+1,-1).sum(), 1.)
+    np.testing.assert_almost_equal(np.dot(P_return_A, state_11_15).reshape(MAX_CAPACITY+1,-1)[:,15].sum(), 1.)
+    np.testing.assert_almost_equal(np.dot(P_return_A, state_11_15).reshape(MAX_CAPACITY+1,-1)[11:,15].sum(), 1.) 
+    
+    P_return_B_one_loc = get_return_transition_matrix_one_location(B)
+    P_return_B = full_transition_matrix_B(P_return_B_one_loc)
+    # should mix only states of B: 
+    np.testing.assert_almost_equal(np.dot(P_return_B, state_11_15).reshape(MAX_CAPACITY+1,-1).sum(), 1.)
+    np.testing.assert_almost_equal(np.dot(P_return_B, state_11_15).reshape(MAX_CAPACITY+1,-1)[11].sum(), 1.)
+    np.testing.assert_almost_equal(np.dot(P_return_B, state_11_15).reshape(MAX_CAPACITY+1,-1)[11,15:].sum(), 1.)
+    print('[PASSED]: get_return_transitions_for_one_location')
+
+
+
+    #  ===== Function test: get_nightly_moves =====
+    P_move = get_nightly_moves()
+    np.testing.assert_allclose(P_move.sum(axis=0), 1.)
+    # check some moves
+    # assert P_move[:,21*car_at_A+cars_at_B,action+TRANSFER_MAX].reshape(MAX_CAPACITY+1, -1)[new_cars_at_A, new_cars_at_B] == 1.
+    assert P_move[:,0,0].reshape(MAX_CAPACITY+1, -1)[0,0] == 1.
+
+    # e.g. from state [1,0] and action 1 => new state should be  [0,1]
+    assert P_move[:,21*1+0,1+TRANSFER_MAX].reshape(MAX_CAPACITY+1, -1)[0,1] == 1. 
+    assert P_move[:,21*1+1,-2+TRANSFER_MAX].reshape(MAX_CAPACITY+1, -1)[2,0] == 1. 
+    assert P_move[:,21*9+5,0+TRANSFER_MAX].reshape(MAX_CAPACITY+1, -1)[9,5] == 1. 
+    assert P_move[:,21*9+5,3+TRANSFER_MAX].reshape(MAX_CAPACITY+1, -1)[6,8] == 1. 
+    assert P_move[:,21*9+5,-3+TRANSFER_MAX].reshape(MAX_CAPACITY+1, -1)[12,2] == 1.
+    assert P_move[:,21*20+20,5+TRANSFER_MAX].reshape(MAX_CAPACITY+1, -1)[15,20] == 1. 
+    assert P_move[:,21*20+20,-4+TRANSFER_MAX].reshape(MAX_CAPACITY+1, -1)[20,16] == 1. 
+    print('[PASSED]: get_nightly_moves\toutputshape: {}'.format(P_move.shape))
+
+
+    #  ===== Function test: get_nightly_moves =====
+    P = create_P_matrix()
+    np.testing.assert_almost_equal(P.sum(axis=0), 1.)
+    print('[PASSED]: create_P_matrix')
+

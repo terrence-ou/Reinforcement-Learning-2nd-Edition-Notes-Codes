@@ -21,7 +21,6 @@ class JacksCarRentalEnv(gym.Env):
     metadata = {'render_modes': ['human', 'ansi']}
 
     def __init__(self, render_mode=None):
-        print("")
 
         actions = np.arange(-MAX_MOVE_OF_CARS, MAX_MOVE_OF_CARS + 1)
         nA = len(actions)
@@ -47,5 +46,5 @@ class JacksCarRentalEnv(gym.Env):
         self.nA = nA
         self.P = P
         self.isd = isd
-        self.transition = Ptrans.transpose(1, 2, 0)
+        self.transition = Ptrans
         self.reward = R
