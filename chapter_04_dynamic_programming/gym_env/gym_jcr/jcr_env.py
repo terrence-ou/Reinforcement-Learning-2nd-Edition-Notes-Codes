@@ -18,7 +18,7 @@ R = create_R_matrix()
 
 class JacksCarRentalEnv(gym.Env):
 
-    metadata = {'render.modes': ['human', 'ansi']}
+    metadata = {'render_modes': ['human', 'ansi']}
 
     def __init__(self, render_mode=None):
         print("")
