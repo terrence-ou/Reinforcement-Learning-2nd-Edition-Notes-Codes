@@ -39,3 +39,8 @@ This chapter introduces the fundamentals of the Markov Decision Process in finit
 
 ### **Chapter 4: Dynamic Programming**
  *In Progress*
+- Jack's Car Rental example
+<div align='center'>
+    <img src='./chapter_04_dynamic_programming/plots/example_4_2/policy_5.png' width=40%>
+    <img src='./chapter_04_dynamic_programming/plots/example_4_2/value_5.png' width=40%>
+</div>
