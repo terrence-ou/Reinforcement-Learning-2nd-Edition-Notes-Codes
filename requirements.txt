@@ -4,3 +4,4 @@ matplotlib==3.7.1
 seaborn==0.12.2
 scipy=1.10.1
 tqdm==4.65.0
+gymnasium==0.28.1
