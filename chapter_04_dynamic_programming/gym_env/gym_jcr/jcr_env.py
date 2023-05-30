@@ -9,7 +9,7 @@ MAX_MOVE_OF_CARS = 5
 Ptrans = create_P_matrix()
 R = create_R_matrix()
 
-
+# Create new gymnasium environment
 class JacksCarRentalEnv(gym.Env):
 
     metadata = {'render_modes': ['human', 'ansi']}
@@ -30,11 +30,11 @@ class JacksCarRentalEnv(gym.Env):
             for s in range(nS)
         }
 
-        
         # isd - initial state dist
         isd = np.full(nS, 1 / nS)
         observation_shape = (MAX_CARS + 1, MAX_CARS + 1)
 
+        # Add required element to the class
         self.observation_shape = observation_shape
         self.observation_space = spaces.Discrete(nS)
         self.action_space = spaces.Discrete(nA)

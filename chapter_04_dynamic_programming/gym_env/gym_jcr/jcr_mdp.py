@@ -1,14 +1,14 @@
-"""
-Still in-progress
-"""
+'''
+IMPORTANT:
+The whole MDP part of the Jack's Car Rental environment is based on Gertjan gsverhoeven's 
+implementation with MIT Liscence:
+https://github.com/gsverhoeven/gym_jcr/blob/main/gym_jcr/jcr_mdp.py
+'''
 
 
 import numpy as np
 from scipy.stats import poisson
 
-
-from matplotlib import pyplot as plt
-import seaborn as sns
 """
 Environment Parameters
 """

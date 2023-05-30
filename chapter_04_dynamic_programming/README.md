@@ -9,8 +9,21 @@ Convergence of iterative policy evaluation on a small gridworld. The last policy
 </p>
 
 ### 4.2 Jack's Car Rental (*p.81*)
-**Important:** Before running this example, be sure to first install the Jack's Car Rental environment by:
+The sequence policies found by policy iteration on Jack's car rental problem, and the final state-value function.<br>
+<br>**Important:** <br>
+The MDP part of the Jack's Car Rental environment comes from Gertjan gsverhoeven's 
+implementation under the MIT Liscence: [GitHub](https://github.com/gsverhoeven/gym_jcr/blob/main/gym_jcr/jcr_mdp.py)<br>
+Before running this example, be sure to first install the Jack's Car Rental environment by:
 ```bash
 cd gym_env
 pip install .
 ```
+<p align="center">
+    <img src='./plots/example_4_2/policy_0.png' width=30%>
+    <img src='./plots/example_4_2/policy_1.png' width=30%>
+    <img src='./plots/example_4_2/policy_2.png' width=30%>
+</p>
+<p align="center">
+    <img src='./plots/example_4_2/policy_5.png' width=40%>
+    <img src='./plots/example_4_2/value_5.png' width=40%>
+</p>
