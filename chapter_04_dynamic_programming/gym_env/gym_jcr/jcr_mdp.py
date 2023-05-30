@@ -73,8 +73,8 @@ def full_transition_matrix_B(transition_one_loc):
     transition_matrix = np.zeros(shape=(block_size ** 2, block_size ** 2))
     
     for i in range(block_size):
-        transition_matrix[i * block_size : (i * block_size + block_size),
-                          i * block_size : (i * block_size + block_size)] = transition_one_loc
+        transition_matrix[i * block_size : (i * block_size) + block_size,
+                          i * block_size : (i * block_size) + block_size] = transition_one_loc
     
     return transition_matrix
 
@@ -136,7 +136,7 @@ def create_P_matrix():
     P_return_A_one_loc = get_return_transition_matrix_one_location(A)
     P_return_A = full_transition_matrix_A(P_return_A_one_loc)
     P_return_B_one_loc = get_return_transition_matrix_one_location(B)
-    P_return_B = full_transition_matrix_A(P_return_B_one_loc)
+    P_return_B = full_transition_matrix_B(P_return_B_one_loc)
 
     P_return = np.dot(P_return_A, P_return_B)
 

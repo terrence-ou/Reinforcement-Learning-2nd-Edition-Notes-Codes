@@ -1,11 +1,6 @@
 import numpy as np
-import sys
-from six import StringIO, b
-
 import gymnasium as gym
-from gymnasium import utils, spaces
-
-from scipy.stats import poisson
+from gymnasium import spaces
 from .jcr_mdp import *
 
 MAX_CARS = 20
@@ -13,7 +8,6 @@ MAX_MOVE_OF_CARS = 5
 
 Ptrans = create_P_matrix()
 R = create_R_matrix()
-
 
 
 class JacksCarRentalEnv(gym.Env):
@@ -35,6 +29,8 @@ class JacksCarRentalEnv(gym.Env):
             }
             for s in range(nS)
         }
+
+        
         # isd - initial state dist
         isd = np.full(nS, 1 / nS)
         observation_shape = (MAX_CARS + 1, MAX_CARS + 1)
