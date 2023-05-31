@@ -55,6 +55,7 @@ def plot_policy(policy, curr_iter, save=False):
 
 
 if __name__ == "__main__":
+    # Turn on the 'resolve' to taking non-linear rewards into training 
     env = gymnasium.make('JacksCarRental-v0', resolve=True)
     R = env.reward # The reward matrix
     P = env.transition # The transition probability matrix
