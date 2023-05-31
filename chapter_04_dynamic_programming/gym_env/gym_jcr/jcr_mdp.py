@@ -1,8 +1,10 @@
 '''
 IMPORTANT:
-The whole MDP part of the Jack's Car Rental environment is based on Gertjan gsverhoeven's 
+The MDP part of the Jack's Car Rental environment is based on Gertjan gsverhoeven's 
 implementation with MIT Liscence:
 https://github.com/gsverhoeven/gym_jcr/blob/main/gym_jcr/jcr_mdp.py
+
+This file also added the implementation of the exercise 4.7
 '''
 
 
@@ -21,6 +23,12 @@ RENTAL_INCOME = 10
 TRANSFER_COST = 2
 TRANSFER_MAX  = 5
 MAX_CAPACITY  = 20
+
+# Parameters for resolveing the 
+FREE_SHUTTLE = 1
+PARK_LIMIT = 10
+ADDITIONAL_PARK_COST = 4
+
 
 # Location Indicies
 A = 0
@@ -181,6 +189,48 @@ def create_R_matrix():
     reward = reward.reshape(441, 11)
     return reward
 
+
+
+# Create reward matrix
+def create_R_matrix_resolve():
+    poisson_mask = np.zeros(shape=(2, MAX_CAPACITY + 1, MAX_CAPACITY + 1))
+    po = (poisson.pmf(np.arange(MAX_CAPACITY + 1), REQUEST_RATE[A]),
+          poisson.pmf(np.arange(MAX_CAPACITY + 1), REQUEST_RATE[B]))
+    for loc in (A, B):
+        for i in range(MAX_CAPACITY + 1):
+            poisson_mask[loc, i, :i] = po[loc][:i]
+            poisson_mask[loc, i, i] = po[loc][i:].sum()
+    # The poisson mask contains the probability distribution for renting x cars (x column)
+    # in each row j, with j the number of cars available at the location
+
+    reward = np.zeros(shape=(MAX_CAPACITY + 1, MAX_CAPACITY + 1, 2 * TRANSFER_MAX + 1))
+    for a in range(MAX_CAPACITY + 1):
+        for b in range(MAX_CAPACITY + 1):
+            for action in range(-TRANSFER_MAX, TRANSFER_MAX + 1):
+
+                moved_cars = min(action, a) if action >= 0 else max(action, -b)
+                a_ = a - moved_cars
+                a_ = min(MAX_CAPACITY, max(0, a_))
+                b_ = b + moved_cars
+                b_ = min(MAX_CAPACITY, max(0, b_))
+                reward_a = np.dot(poisson_mask[A, a_], np.arange(MAX_CAPACITY + 1))
+                reward_b = np.dot(poisson_mask[B, b_], np.arange(MAX_CAPACITY + 1))
+
+                # Update reward based on the conditions proposed in exercise 4.7 
+                ttl_rental_income = (reward_a + reward_b) * RENTAL_INCOME
+                ttl_transfer_cost = np.abs(action) * TRANSFER_COST
+                if action > 0:
+                    ttl_transfer_cost -= FREE_SHUTTLE * TRANSFER_COST # stuff help move one car from b to a
+                parking_cost = 0
+                if a_ > PARK_LIMIT: 
+                    parking_cost += ADDITIONAL_PARK_COST
+                if b_ > PARK_LIMIT:
+                    parking_cost += ADDITIONAL_PARK_COST
+
+                reward[a, b, action + TRANSFER_MAX] = ttl_rental_income - ttl_transfer_cost - parking_cost
+    
+    reward = reward.reshape(441, 11)
+    return reward
 
 
 

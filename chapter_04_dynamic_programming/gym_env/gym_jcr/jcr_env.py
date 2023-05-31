@@ -6,15 +6,20 @@ from .jcr_mdp import *
 MAX_CARS = 20
 MAX_MOVE_OF_CARS = 5
 
-Ptrans = create_P_matrix()
-R = create_R_matrix()
 
 # Create new gymnasium environment
 class JacksCarRentalEnv(gym.Env):
 
     metadata = {'render_modes': ['human', 'ansi']}
 
-    def __init__(self, render_mode=None):
+    def __init__(self, resolve=False, render_mode=None):
+        
+        Ptrans = create_P_matrix()
+        if resolve:
+            R = create_R_matrix_resolve()
+        else:
+            R = create_R_matrix()
+
 
         actions = np.arange(-MAX_MOVE_OF_CARS, MAX_MOVE_OF_CARS + 1)
         nA = len(actions)
