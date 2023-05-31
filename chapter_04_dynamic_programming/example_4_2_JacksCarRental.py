@@ -103,8 +103,8 @@ if __name__ == "__main__":
             if policy[s] != old_policy[s]:
                 policy_stable = False
             
-        plot_policy(policy, curr_iter, True)
+        # plot_policy(policy, curr_iter, False)
         if policy_stable: break
         curr_iter += 1
 
-    plot_3d_value(values, curr_iter, True)
+    # plot_3d_value(values, curr_iter, False)
