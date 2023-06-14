@@ -26,7 +26,6 @@ My work mainly consists of:<br/>
     <img src='./chapter_02_k_armed_bandits/plots/example_2_6_summary.png' width=65%>
 </p>
 
----
 ### **Chapter 3: Finite Markov Decision Process** &nbsp; &nbsp; :link: [link](/chapter_03_finite_MDP/)
 This chapter introduces the fundamentals of the Markov Decision Process in finite states like agent-environment interaction, goals and rewards, returns and episodes, and policy and value function. It helps to build up a basic understanding of the components of reinforcement learning.
 - Optimal solution to the `gridworld` example:
@@ -34,8 +33,6 @@ This chapter introduces the fundamentals of the Markov Decision Process in finit
     <img src='./chapter_03_finite_MDP/plots/example_3_8/optimal_values.png' width=35%>
     <img src='./chapter_03_finite_MDP/plots/example_3_8/optimal_actions.png' width=35%>
 </div>
-
----
 
 ### **Chapter 4: Dynamic Programming**
  *In Progress*
