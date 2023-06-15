@@ -16,10 +16,11 @@ if __name__ == "__main__":
     # such method allows for ignoring the reward function
     V = np.zeros(shape=(101,))
     V[-1] = 1
+
     # Probability of head
     prob_h = 0.4
     # threshold of convergence
-    theta = 1e-3
+    theta = 1e-8
     history = None
 
     # Value iteration
@@ -40,3 +41,19 @@ if __name__ == "__main__":
         if delta < theta: break
 
     print('Total number of sweeps: ', history.shape[0])
+
+    # Get policy
+    policy = np.zeros_like(V)
+    for curr_state in range(1, 100):
+        actions = get_actions(curr_state)
+        wins, fails = get_next_states(V, curr_state, actions)
+        values = prob_h * wins + (1 - prob_h) * fails
+        best_choice = np.where(values == values.max())[0]
+        policy[curr_state] = actions[np.random.choice(best_choice)]
+    # print(policy)
+    # print(len(policy[1:-1]))
+    plt.plot(V)
+    plt.show()
+
+    plt.step(np.arange(1, 100), policy[1:-1], where='mid', label='mid')
+    plt.show()
