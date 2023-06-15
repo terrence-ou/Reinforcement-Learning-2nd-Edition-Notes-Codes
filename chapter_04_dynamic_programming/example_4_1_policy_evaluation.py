@@ -17,7 +17,7 @@ def env_step(state:tuple,
 
 
 # Iterative policy evaluation
-def policy_evaluation(grid_world:np.array,
+def policy_evaluation(grid_world:np.ndarray,
                         actions:list,
                         probs:list,
                         gamma:float,
@@ -43,7 +43,7 @@ def policy_evaluation(grid_world:np.array,
 
 
 # Get greedy policy from current values
-def greedy_policy(grid_world:np.array,
+def greedy_policy(grid_world:np.ndarray,
                     actions:list,
                     probs:list,
                     gamma:float,
