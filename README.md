@@ -34,10 +34,17 @@ This chapter introduces the fundamentals of the Markov Decision Process in finit
     <img src='./chapter_03_finite_MDP/plots/example_3_8/optimal_actions.png' width=35%>
 </div>
 
-### **Chapter 4: Dynamic Programming**
+### **Chapter 4: Dynamic Programming**  &nbsp; &nbsp; :link: [link](/chapter_04_dynamic_programming/)
  *In Progress*
+
 - Jack's Car Rental example
 <div align='center'>
     <img src='./chapter_04_dynamic_programming/plots/example_4_2/policy_5.png' width=40%>
     <img src='./chapter_04_dynamic_programming/plots/example_4_2/value_5.png' width=40%>
+</div>
+
+- Gambler's problem
+<div align='center'>
+    <img src='./chapter_04_dynamic_programming/plots/exercise_4_9/ph_0.25/values.png' width=65%>
+    <img src='./chapter_04_dynamic_programming/plots/exercise_4_9/ph_0.25/policy.png' width=65%>
 </div>
