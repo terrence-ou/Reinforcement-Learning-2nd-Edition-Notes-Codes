@@ -4,7 +4,7 @@ from scipy.ndimage import uniform_filter
 
 
 # Get the action with the max Q value
-def get_argmax(G:np.array) -> int:
+def get_argmax(G:np.ndarray) -> int:
     candidates = np.argwhere(G == G.max()).flatten()
     # return the only index if there's only one max
     if len(candidates) == 1:
@@ -15,7 +15,7 @@ def get_argmax(G:np.array) -> int:
 
 
 # Select arm and get the reward
-def bandit(q_star:np.array, 
+def bandit(q_star:np.ndarray, 
            act:int) -> tuple:
     real_rewards = np.random.normal(q_star, 1.0)
     # optim_choice = int(real_rewards[act] == real_rewards.max())
@@ -24,7 +24,7 @@ def bandit(q_star:np.array,
 
 
 # Plot results
-def plot(data:np.array, 
+def plot(data:np.ndarray, 
         legends:list, 
         xlabel:str, 
         ylabel:str, 

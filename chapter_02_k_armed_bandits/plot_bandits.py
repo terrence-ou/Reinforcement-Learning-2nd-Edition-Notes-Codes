@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from utils import plot
 
 
-def plot_result(rewards:np.array, 
-                optim_ratio:np.array, 
+def plot_result(rewards:np.ndarray, 
+                optim_ratio:np.ndarray, 
                 legends:list, 
                 output_names:list):
 

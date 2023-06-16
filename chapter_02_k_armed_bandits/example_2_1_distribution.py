@@ -53,5 +53,5 @@ if __name__ == "__main__":
     plt.margins(0)
 
     plt.tight_layout()
-    # plt.show()
-    plt.savefig('./plots/example_2_1.png')
+    plt.show()
+    # plt.savefig('./plots/example_2_1.png')

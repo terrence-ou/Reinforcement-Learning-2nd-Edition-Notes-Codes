@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 
 # Plot results
-def plot(data:np.array, 
+def plot(data:np.ndarray, 
         legends:list, 
         xlabel:str, 
         ylabel:str, 
@@ -52,7 +52,7 @@ def plot(data:np.array,
         plt.savefig(f'./plots/{filename}')
 
 
-def plot_result(optim_ratio:np.array, 
+def plot_result(optim_ratio:np.ndarray, 
                 legends:list, 
                 output_name:str=None):
     # Set tick labels

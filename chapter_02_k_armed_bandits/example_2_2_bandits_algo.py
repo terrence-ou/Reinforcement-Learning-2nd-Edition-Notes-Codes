@@ -9,10 +9,10 @@ np.random.seed(SEED)
 
 # running the k-armed bandit algorithm
 def run_bandit(K:int, 
-            q_star:np.array,
-            rewards:np.array,
-            optim_acts_ratio: np.array,
-            epsilon: float, 
+            q_star:np.ndarray,
+            rewards:np.ndarray,
+            optim_acts_ratio:np.ndarray,
+            epsilon:float, 
             num_steps:int=1000) -> None:
     
     Q = np.zeros(K) # Initialize Q values
@@ -67,8 +67,8 @@ if __name__ == "__main__":
         'optim_acts_ratio': optim_acts_ratio
     }
 
-    # for ratio in optim_acts_ratio:
-    #     plt.plot(ratio)
-    # plt.show()
-    with open('./history/record.pkl', 'wb') as f:
-        pickle.dump(record, f)
+    for ratio in optim_acts_ratio:
+        plt.plot(ratio)
+    plt.show()
+    # with open('./history/record.pkl', 'wb') as f:
+    #     pickle.dump(record, f)

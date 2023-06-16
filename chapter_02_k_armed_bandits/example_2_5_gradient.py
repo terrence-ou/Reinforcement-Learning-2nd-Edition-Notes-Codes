@@ -8,15 +8,15 @@ from utils import bandit
 SEED = 50
 np.random.seed(SEED)
 
-def update_policy(H:np.array) -> np.array:
+def update_policy(H:np.ndarray) -> np.ndarray:
     return np.exp(H) / np.exp(H).sum()
 
-def update_H(H:np.array, 
-                policy:np.array, 
+def update_H(H:np.ndarray, 
+                policy:np.ndarray, 
                 alpha:float,
                 A:int, 
                 curr_reward:float, 
-                avg_reward:float) -> np.array:
+                avg_reward:float) -> np.ndarray:
     selec = np.zeros(len(H), dtype=np.float32)
     selec[A] = 1.0
     H = H + alpha * (curr_reward - avg_reward) * (selec - policy)
@@ -24,10 +24,10 @@ def update_H(H:np.array,
 
 # running the k-armed bandit algorithm
 def run_bandit(K:int, 
-            q_star:np.array,
-            rewards:np.array,
-            optim_acts_ratio: np.array,
-            alpha: float,
+            q_star:np.ndarray,
+            rewards:np.ndarray,
+            optim_acts_ratio:np.ndarray,
+            alpha:float,
             baseline:bool,
             num_steps:int=1000) -> None:
     
@@ -84,16 +84,16 @@ if __name__ == "__main__":
     
     optim_acts_ratio = optim_acts_ratio.mean(axis=1)
 
-    # for val in optim_acts_ratio:
-    #     plt.plot(val)
-    # plt.show()
+    for val in optim_acts_ratio:
+        plt.plot(val)
+    plt.show()
     
     record = {
         'hyper_params': hyper_params, 
         'optim_acts_ratio': optim_acts_ratio
     }
 
-    with open('./history/sga_record.pkl', 'wb') as f:
-        pickle.dump(record, f)
+    # with open('./history/sga_record.pkl', 'wb') as f:
+    #     pickle.dump(record, f)
 
 

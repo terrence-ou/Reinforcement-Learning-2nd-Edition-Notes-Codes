@@ -13,7 +13,7 @@ np.random.seed(SEED)
 ######################################################################
 
 # Get the action with the max Q value
-def get_argmax(G:np.array) -> int:
+def get_argmax(G:np.ndarray) -> int:
     candidates = np.argwhere(G == G.max()).flatten()
     # return the only index if there's only one max
     if len(candidates) == 1:
@@ -24,7 +24,7 @@ def get_argmax(G:np.array) -> int:
 
 
 # Select arm and get the reward
-def bandit(q_star:np.array, 
+def bandit(q_star:np.ndarray, 
            act:int) -> tuple:
     real_rewards = np.random.normal(q_star, 1.0)
     # optim_choice = int(real_rewards[act] == real_rewards.max())
@@ -32,16 +32,16 @@ def bandit(q_star:np.array,
     return real_rewards[act], optim_choice
 
 # Update policy in gradient bandit algorithm
-def update_policy(H:np.array) -> np.array:
+def update_policy(H:np.ndarray) -> np.ndarray:
     return np.exp(H) / np.exp(H).sum()
 
 # Update preference values for gradient bandit algorithm
-def update_H(H:np.array, 
-                policy:np.array, 
-                alpha:float,
-                A:int, 
-                curr_reward:float, 
-                avg_reward:float) -> np.array:
+def update_H(H:np.ndarray, 
+             policy:np.ndarray, 
+             alpha:float,
+             A:int, 
+             curr_reward:float, 
+             avg_reward:float) -> np.ndarray:
     selec = np.zeros(len(H), dtype=np.float32)
     selec[A] = 1.0
     H = H + alpha * (curr_reward - avg_reward) * (selec - policy)
@@ -55,12 +55,12 @@ def update_H(H:np.array,
 # e_greedy algorithm
 def e_greedy_non_stationary(
             K:int,
-            q_star:np.array,
-            rewards:np.array,
-            optim_acts_ratio: np.array,
-            epsilon: float,
-            alpha: float=None,
-            num_steps: int=1000) -> None:
+            q_star:np.ndarray,
+            rewards:np.ndarray,
+            optim_acts_ratio:np.ndarray,
+            epsilon:float,
+            alpha:float=None,
+            num_steps:int=1000) -> None:
     
     Q = np.zeros(K) # The action-value for each actions 
     ttl_optim_acts = 0
@@ -91,11 +91,11 @@ def e_greedy_non_stationary(
 
 # UCB algorithm
 def UCB_non_stationary(K:int, 
-            q_star:np.array,
-            rewards:np.array,
-            optim_acts_ratio: np.array,
-            c: float,
-            alpha: float,
+            q_star:np.ndarray,
+            rewards:np.ndarray,
+            optim_acts_ratio:np.ndarray,
+            c:float,
+            alpha:float,
             num_steps:int=1000) -> None:
     
     Q = np.zeros(K)
@@ -133,10 +133,10 @@ def UCB_non_stationary(K:int,
 
 # gradient bandit algorithm
 def gradient_bandit_non_stationary(K:int, 
-            q_star:np.array,
-            rewards:np.array,
-            optim_acts_ratio: np.array,
-            alpha: float,
+            q_star:np.ndarray,
+            rewards:np.ndarray,
+            optim_acts_ratio:np.ndarray,
+            alpha:float,
             baseline:bool,
             num_steps:int=1000) -> None:
 
@@ -173,13 +173,13 @@ def gradient_bandit_non_stationary(K:int,
 
 # Optimistic Initial Value
 def OIV_non_stationary(K:int, 
-            q_star:np.array,
-            rewards:np.array,
-            optim_acts_ratio: np.array,
-            epsilon: float, 
-            alpha: float,
+            q_star:np.ndarray,
+            rewards:np.ndarray,
+            optim_acts_ratio:np.ndarray,
+            epsilon:float, 
+            alpha:float,
             num_steps:int=1000,
-            init_val: int=0) -> None:
+            init_val:int=0) -> None:
     
     Q = np.ones(K) * init_val # Initial Q values with OIV
     ttl_optim_acts = 0
@@ -214,9 +214,9 @@ def OIV_non_stationary(K:int,
 # A wraper function for running differen algorithms
 def run_algorithm(fn_name:str,
                     fn:'function',
-                    params:np.array,
+                    params:np.ndarray,
                     args:dict,
-                    total_rounds:int) -> np.array:
+                    total_rounds:int) -> np.ndarray:
 
     if fn_name == 'e_greedy':
         hyper_param = 'epsilon'
@@ -247,7 +247,7 @@ def run_algorithm(fn_name:str,
 if __name__ == "__main__":
     K = 10
     num_steps = 200_000
-    total_rounds = 100
+    total_rounds = 10 # it takes around 20 minutes to run
     q_star = np.random.normal(loc=0, scale=1.0, size=K)
 
     # Creating parameter array: [1/128, 1/64, 1/32, 1/16, ...]
@@ -316,7 +316,7 @@ if __name__ == "__main__":
     oiv_args['alpha'] = 0.1
     oiv_rewards = run_algorithm('oiv', OIV_non_stationary, fn_params, oiv_args, total_rounds)
     records['oiv'] = history(oiv_bounds, oiv_rewards)
-    # plt.plot(np.arange(oiv_bounds[0], oiv_bounds[1]), oiv_rewards)
+    plt.plot(np.arange(oiv_bounds[0], oiv_bounds[1]), oiv_rewards)
 
     # save histories
     with open('./history/exercise_2_6.pkl', 'wb') as f:

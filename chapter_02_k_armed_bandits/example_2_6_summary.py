@@ -15,9 +15,9 @@ np.random.seed(SEED)
 # A wraper function for running differen algorithms
 def run_algorithm(fn_name:str,
                     fn:'function',
-                    params:np.array,
+                    params:np.ndarray,
                     args:dict,
-                    total_rounds:int) -> np.array:
+                    total_rounds:int) -> np.ndarray:
 
     if fn_name == 'e_greedy':
         hyper_param = 'epsilon'

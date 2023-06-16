@@ -9,13 +9,13 @@ np.random.seed(SEED)
 
 # running the k-armed bandit algorithm on non-stationary environment
 def run_bandit_non_stationary(K:int, 
-            q_star:np.array,
-            rewards:np.array,
-            optim_acts_ratio: np.array,
-            epsilon: float,
-            method: str, # method should be in ["sample", "weighted"] 
-            alpha: float=None,
-            num_steps: int=1000) -> None:
+            q_star:np.ndarray,
+            rewards:np.ndarray,
+            optim_acts_ratio:np.ndarray,
+            epsilon:float,
+            method:str, # method should be in ["sample", "weighted"] 
+            alpha:float=None,
+            num_steps:int=1000) -> None:
     
     Q = np.zeros(K) # The action-value for each actions 
     N = np.zeros(K) # The number of times each action been selected    
@@ -77,8 +77,8 @@ if __name__ == "__main__":
     rewards = rewards.mean(axis=1)
     optim_acts_ratio = optim_acts_ratio.mean(axis=1)
 
-    # plt.plot(rewards, linewidth=1.0)
-    # plt.show()
+    plt.plot(rewards, linewidth=1.0)
+    plt.show()
     
     record = {
         'hyper_params': methods,
@@ -86,6 +86,6 @@ if __name__ == "__main__":
         'optim_acts_ratio': optim_acts_ratio,
     }
 
-    with open('./history/non_stationary_record.pkl', 'wb') as f:
-        pickle.dump(record, f)
+    # with open('./history/non_stationary_record.pkl', 'wb') as f:
+    #     pickle.dump(record, f)
 
