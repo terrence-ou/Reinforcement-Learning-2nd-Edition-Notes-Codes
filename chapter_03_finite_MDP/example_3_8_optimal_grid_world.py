@@ -25,7 +25,7 @@ def get_reward(state:tuple, act:tuple):
 
 
 # value function
-def value_update(grid_world:np.array, 
+def value_update(grid_world:np.ndarray, 
                  actions:list):
     '''
     grid_world: the 5x5 grid world map, numpy array
@@ -58,7 +58,7 @@ def value_update(grid_world:np.array,
 
 
 # plot the value table
-def plot_grid(grid_world:np.array, annot=None):
+def plot_grid(grid_world:np.ndarray, annot=None):
     annot_kwargs = {
         'fontsize': '18',
         # 'fontweight': 'bold'

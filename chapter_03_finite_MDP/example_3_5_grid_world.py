@@ -3,7 +3,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 
 # get a reward based on the state and action
-def get_reward(state:tuple, act: tuple):
+def get_reward(state:tuple, act:tuple):
     '''
     state: current state, tuple (row, col)
     act: action, tuple (d_row, d_col)
@@ -25,7 +25,7 @@ def get_reward(state:tuple, act: tuple):
 
 
 # value function
-def value_update(grid_world:np.array):
+def value_update(grid_world:np.ndarray):
     '''
     grid_world: the 5x5 grid world map, numpy array
     '''
@@ -40,7 +40,7 @@ def value_update(grid_world:np.array):
 
 
 # plot the value table
-def plot_grid(grid_world:np.array, iteration:int=0):
+def plot_grid(grid_world:np.ndarray, iteration:int=0):
     annot_kwargs = {
         'fontsize': '18'
     }
