@@ -46,7 +46,6 @@ Parameter study of the various bandit algorithms presented in the chapter.
     <img src='./plots/example_2_6_summary.png' width=65%>
 </p>
 
----
 
 ## **Exercises**
 
