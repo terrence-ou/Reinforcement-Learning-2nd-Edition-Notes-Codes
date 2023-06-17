@@ -35,16 +35,16 @@ This chapter introduces the fundamentals of the Markov Decision Process in finit
 </div>
 
 ### **Chapter 4: Dynamic Programming**  &nbsp; &nbsp; :link: [link](/chapter_04_dynamic_programming/)
- *In Progress*
+The dynamic programming (DP) methods introduced in this chapter includes policy iteration, which consists policy evaluation and policy improvement, and value iteration, which considered a concise and efficient version of policy iteration. The chapter puts up a topic that the evaluation and improvement process compete with each other but also cooperate to find the optimal value function and an optimal policy.
 
 - Jack's Car Rental example
 <div align='center'>
-    <img src='./chapter_04_dynamic_programming/plots/example_4_2/policy_5.png' width=40%>
-    <img src='./chapter_04_dynamic_programming/plots/example_4_2/value_5.png' width=40%>
+    <img src='./chapter_04_dynamic_programming/plots/example_4_2/policy_5.png' width=45%>
+    <img src='./chapter_04_dynamic_programming/plots/example_4_2/value_5.png' width=45%>
 </div>
 
 - Gambler's problem
 <div align='center'>
-    <img src='./chapter_04_dynamic_programming/plots/exercise_4_9/ph_0.25/values.png' width=65%>
-    <img src='./chapter_04_dynamic_programming/plots/exercise_4_9/ph_0.25/policy.png' width=65%>
+    <img src='./chapter_04_dynamic_programming/plots/exercise_4_9/ph_0.25/values.png' width=49%>
+    <img src='./chapter_04_dynamic_programming/plots/exercise_4_9/ph_0.25/policy.png' width=49%>
 </div>
