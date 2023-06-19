@@ -1,12 +1,7 @@
-
-##############################################
-# This example is still in progress
-##############################################
-
 import numpy as np
 import gymnasium as gym
 from collections import defaultdict
-from matplotlib import pyplot as plt
+import utils
 
 # In example 5.1, the policy is:
 # - stick (0) if the player's sum is 20 or 21
@@ -23,42 +18,6 @@ def get_state_action(observation:tuple) -> tuple:
     return (state, action)
 
 
-def plot_surface(V):
-    fig, ax = plt.subplots(subplot_kw={'projection': '3d'},
-                        figsize=(8, 6))
-    ax.set_box_aspect((1, 1, 0.3))
-    V = V[12:22, 1:]
-
-    Y = np.arange(V.shape[0])
-    X = np.arange(V.shape[1])
-    X, Y = np.meshgrid(X, Y)
-
-    surf = ax.plot_surface(X, Y, V, 
-                           cmap='Blues',
-                           rstride=1,
-                           cstride=1,
-                           linewidth=0.5,
-                           edgecolor='white',
-                           alpha=0.9
-                           )
-
-    ax.set_xticks(range(0, 11), ['A'] + [f'{i}' for i in range(2, 11)] + ['Face'])
-    ax.set_yticks(range(0, 10), range(12, 22))
-    ax.set_zticks([-1.0, 0, 1.0])
-
-    ax.set_xlabel('Dealer Showing')
-    ax.set_ylabel('Player Sum')
-    ax.view_init(elev=33, azim=-50)
-    
-    ax.xaxis.pane.fill = False
-    ax.yaxis.pane.fill = False
-    ax.zaxis.pane.fill = False
-
-    plt.tight_layout()
-    plt.show()
-
-
-
 if __name__ == "__main__":
     # Create blackjack environment
     # Turn sab True to make the env follows the S&B books reward
@@ -72,9 +31,10 @@ if __name__ == "__main__":
     Returns = defaultdict(list)
 
     # Hyper parameters
-    num_episodes = 5_000
+    num_episodes = 500_000
     gamma = 1.0
 
+    # Loop over episodes
     for _ in range(num_episodes):
         terminated = False
         observation, into = env.reset()
@@ -99,4 +59,6 @@ if __name__ == "__main__":
                 Returns[state].append(G)
                 V[state] = np.mean(Returns[state])
     
-    plot_surface(V)
+    # Visualize results
+    file_path_name = './plots/example_5_1/' + f'{num_episodes}_episodes.png'
+    utils.plot_surface(V, title=f'After {num_episodes} episodes', savefig=True, file_path_name=file_path_name)
