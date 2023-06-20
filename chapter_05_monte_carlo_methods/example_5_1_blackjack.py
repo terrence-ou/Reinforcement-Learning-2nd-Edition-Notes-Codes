@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # Loop over episodes
     for _ in range(num_episodes):
         terminated = False
-        observation, into = env.reset()
+        observation, info = env.reset()
         state, action = get_state_action(observation)
 
         traj = [] # trajectory of (state, action, reward)
