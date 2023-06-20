@@ -27,8 +27,13 @@ if __name__ == "__main__":
     dealer_faces = env.observation_space[1].n    
     # Initialize V
     V = np.zeros(shape=(player_sums, dealer_faces))
+
     # Initialize Returns
-    Returns = defaultdict(list)
+    # a. List method stated in the book:
+    # Returns = defaultdict(list)
+    # b. Incremental update method, way faster than the list method:
+    Returns = np.zeros_like(V, dtype=np.float32)
+    counts = np.zeros_like(V, dtype=np.int16)
 
     # Hyper parameters
     num_episodes = 500_000
@@ -56,9 +61,14 @@ if __name__ == "__main__":
             G = gamma * G + reward
             if state not in seen:
                 seen.add(state)
-                Returns[state].append(G)
-                V[state] = np.mean(Returns[state])
-    
+                # a. For the list method:                
+                # Returns[state].append(G)
+                # V[state] = np.mean(Returns[state])
+                # b. For the incremental update method:
+                Returns[state] += G
+                counts[state] += 1
+                V[state] = Returns[state] / counts[state]
+
     # Visualize results
     file_path_name = './plots/example_5_1/' + f'{num_episodes}_episodes.png'
-    utils.plot_surface(V, title=f'After {num_episodes} episodes', savefig=True, file_path_name=file_path_name)
+    utils.plot_surface(V, title=f'After {num_episodes} episodes', savefig=False, file_path_name=file_path_name)
