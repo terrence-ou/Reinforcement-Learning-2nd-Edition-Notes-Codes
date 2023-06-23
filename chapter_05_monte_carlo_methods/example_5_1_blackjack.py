@@ -30,7 +30,7 @@ if __name__ == "__main__":
     counts = np.zeros_like(V, dtype=np.int16)
 
     # # Hyper parameters
-    num_episodes = 10_000
+    num_episodes = 500_000
     gamma = 1.0
 
     # # Loop over episodes
@@ -66,5 +66,11 @@ if __name__ == "__main__":
                 V[state] = Returns[state] / counts[state]
 
     # Visualize results
-    file_path_name = './plots/example_5_1/' + f'{num_episodes}_episodes.png'
-    utils.plot_surface(V[:, :, 1], title=f'After {num_episodes} episodes', savefig=False, file_path_name=file_path_name)
+    for usable_ace in range(2):
+        if_useable_ace = 'usable ace' if usable_ace else 'no usable ace'
+        postfix = '_'.join(if_useable_ace.split(' '))
+        file_path_name = './plots/example_5_1/' + f'{num_episodes}_episodes_' + postfix + '.png'
+        utils.plot_surface(V[:, :, usable_ace], 
+                           title=f'After {num_episodes} episodes ({if_useable_ace})', 
+                           savefig=True, 
+                           file_path_name=file_path_name)
