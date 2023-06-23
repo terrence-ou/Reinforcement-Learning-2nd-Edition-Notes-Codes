@@ -68,7 +68,7 @@ def plot_policy(policy, title=None, savefig=False, file_path_name=None):
 
 
     policy = policy[11:22, 1:]
-    fig = plt.figure(figsize=(8, 6), dpi=300)
+    fig = plt.figure(figsize=(7, 6), dpi=150)
 
     # visualize policy with heatmap
     ax = sns.heatmap(policy, 
@@ -89,4 +89,4 @@ def plot_policy(policy, title=None, savefig=False, file_path_name=None):
     if not savefig:
         plt.show()
     else:
-        plt.savefig(file_path_name, bbox_inches='tight')
+        plt.savefig(file_path_name)

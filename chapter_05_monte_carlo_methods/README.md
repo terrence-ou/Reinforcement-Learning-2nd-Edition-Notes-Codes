@@ -30,12 +30,12 @@ Apply Monte Carlo ES to blackjack. The initial policy is to stick only on the pl
 
 <p align="center">
     <img src='./plots/example_5_3/optimal_policy_usable_ace.png' width=45%>
-    <img src='./plots/example_5_3/optimal_value_usable_ace.png' width=45%>
+    <img src='./plots/example_5_3/optimal_value_usable_ace.png' width=40.25%>
 </p>
 
 **No usable ace:**
 
 <p align="center">
     <img src='./plots/example_5_3/optimal_policy_no_usable_ace.png' width=45%>
-    <img src='./plots/example_5_3/optimal_value_no_usable_ace.png' width=45%>
+    <img src='./plots/example_5_3/optimal_value_no_usable_ace.png' width=40.25%>
 </p>
