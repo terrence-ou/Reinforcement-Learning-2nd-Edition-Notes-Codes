@@ -43,7 +43,7 @@ if __name__ == "__main__":
         traj = [] # trajectory of (state, action, reward)
         seen = set() # For first-visit MC method
 
-    #     # Get a trajectory
+        # Get a trajectory
         while not terminated:
             observation, reward, terminated, truncated, info = env.step(action)
             traj.append((state, action, reward))
@@ -57,10 +57,10 @@ if __name__ == "__main__":
             G = gamma * G + reward
             if state not in seen:
                 seen.add(state)
-    #             # a. For the list method:                
-    #             # Returns[state].append(G)
-    #             # V[state] = np.mean(Returns[state])
-    #             # b. For the incremental update method:
+                # a. For the list method:                
+                # Returns[state].append(G)
+                # V[state] = np.mean(Returns[state])
+                # b. For the incremental update method:
                 Returns[state] += G
                 counts[state] += 1
                 V[state] = Returns[state] / counts[state]
