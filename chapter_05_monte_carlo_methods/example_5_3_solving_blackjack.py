@@ -14,7 +14,7 @@ def initialize_policy(shape:tuple) -> tuple:
     return policy
 
 
-# Monte-Carlo ES
+# Monte-Carlo ES, the training function
 def monte_carlo_es(num_episodes=10_000, save_record=False) -> np.ndarray:
 
     env = gym.make('Blackjack-v1', sab=True)
@@ -62,9 +62,10 @@ def monte_carlo_es(num_episodes=10_000, save_record=False) -> np.ndarray:
                 seen.add(state_action)
                 Returns[state_action] += G
                 counts[state_action] += 1
+                # Update Q value and policy
                 Q[state_action] = Returns[state_action] / counts[state_action]
                 policy[state] = np.argmax(Q[state])
-        
+        # Save record
         if save_record:
             with open('./history/example_5_3.pkl', 'wb') as f:
                 record = {'Q': Q,
@@ -74,22 +75,29 @@ def monte_carlo_es(num_episodes=10_000, save_record=False) -> np.ndarray:
     return Q, policy
 
 
-
 if __name__ == "__main__":
 
-    num_episodes = 1_000_000
+    num_episodes = 500_000
+    Q, policy = monte_carlo_es(num_episodes, save_record=True)
 
-    # Q, policy = monte_carlo_es(num_episodes, save_record=False)
-
-    with open('./history/example_5_3.pkl', 'rb') as f:
-        record = pickle.load(f)
-        Q = record['Q']
-        policy = record['policy']
+    # with open('./history/example_5_3.pkl', 'rb') as f:
+    #     record = pickle.load(f)
+    #     Q = record['Q']
+    #     policy = record['policy']
 
     V = np.max(Q, axis=-1)
-    utils.plot_surface(V[:, :, 1])
-    policy = policy[12:22, 1:, 1]
-    plt.imshow(policy)
-    plt.show()
+
+    # Plot the result
+    for usable_ace in range(2):
+        if_useable_ace = 'usable ace' if usable_ace else 'no usable ace'
+        postfix = '_'.join(if_useable_ace.split(' '))
+        # Plot optimal value
+        file_path_name = './plots/example_5_3/' + f'optimal_value_' + postfix + '.png'
+        title = 'Optimal value ($\\bf{v_*}$)'
+        utils.plot_surface(V[:, :, usable_ace], title=title, savefig=True, file_path_name=file_path_name)
+        # Plot optimal policy
+        file_path_name = './plots/example_5_3/' + f'optimal_policy_' + postfix + '.png'
+        title = 'Optimal policy ($\\bf{\pi_*}$)'
+        utils.plot_policy(policy[:, :, usable_ace], title=title, savefig=True, file_path_name=file_path_name)
 
     

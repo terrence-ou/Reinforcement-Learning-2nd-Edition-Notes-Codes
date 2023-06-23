@@ -1,4 +1,5 @@
 from matplotlib import pyplot as plt
+import seaborn as sns
 import numpy as np
 
 # Plot state-value function
@@ -55,6 +56,38 @@ def plot_surface(V, title=None, savefig=False, file_path_name=None):
         plt.savefig(file_path_name, bbox_inches='tight')
 
 
+def plot_policy(policy, title=None, savefig=False, file_path_name=None):
 
-def plot_policy(policy):
-    pass
+    fontdict = {'fontsize': 11, 
+            # 'fontweight': 'bold'
+            }
+    
+    title_fontdict = {'fontsize': 12, 
+                      'fontweight': 'bold'}
+
+
+    policy = policy[11:22, 1:]
+    fig = plt.figure(figsize=plt.figaspect(0.8), dpi=300)
+    
+    # palatte = sns.color_palette('ch:start=.2,rot=-.3')
+    palatte = sns.color_palette("Spectral", as_cmap=True)
+
+    ax = sns.heatmap(policy, 
+                     linewidths=0.3,
+                     xticklabels= ['A'] + [f'{i}' for i in range(2, 11)],
+                     yticklabels= range(11, 22),
+                     cmap=['lightsteelblue', 'darkslateblue'],
+                     cbar_kws=dict(ticks=[0, 1]))
+    ax.invert_yaxis()
+    ax.tick_params(axis='both', bottom=False, left=False)
+
+    ax.set_xlabel('Dealer Showing', fontdict=fontdict)
+    ax.set_ylabel('Player Sum', fontdict=fontdict)
+
+    if title:
+        ax.set_title(title, fontdict=title_fontdict)
+
+    if not savefig:
+        plt.show()
+    else:
+        plt.savefig(file_path_name, bbox_inches='tight')
