@@ -56,6 +56,7 @@ def plot_surface(V, title=None, savefig=False, file_path_name=None):
         plt.savefig(file_path_name, bbox_inches='tight')
 
 
+# plot the policy
 def plot_policy(policy, title=None, savefig=False, file_path_name=None):
 
     fontdict = {'fontsize': 11, 
@@ -67,11 +68,9 @@ def plot_policy(policy, title=None, savefig=False, file_path_name=None):
 
 
     policy = policy[11:22, 1:]
-    fig = plt.figure(figsize=plt.figaspect(0.8), dpi=300)
-    
-    # palatte = sns.color_palette('ch:start=.2,rot=-.3')
-    palatte = sns.color_palette("Spectral", as_cmap=True)
+    fig = plt.figure(figsize=(8, 6), dpi=300)
 
+    # visualize policy with heatmap
     ax = sns.heatmap(policy, 
                      linewidths=0.3,
                      xticklabels= ['A'] + [f'{i}' for i in range(2, 11)],
