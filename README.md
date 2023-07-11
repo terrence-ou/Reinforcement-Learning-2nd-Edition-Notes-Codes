@@ -48,3 +48,13 @@ The dynamic programming (DP) methods introduced in this chapter includes policy 
     <img src='./chapter_04_dynamic_programming/plots/exercise_4_9/ph_0.25/values.png' width=49%>
     <img src='./chapter_04_dynamic_programming/plots/exercise_4_9/ph_0.25/policy.png' width=49%>
 </div>
+
+### **Chapter 5: Monte Carlo Methods**  &nbsp; &nbsp; :link: [link](/chapter_05_monte_carlo_methods/)
+
+*in progress*
+- Jack's Car Rental example
+
+<div align='center'>
+    <img src='./chapter_05_monte_carlo_methods/plots/example_5_3/optimal_policy_no_usable_ace.png' width=45%>
+    <img src='./chapter_05_monte_carlo_methods/plots/example_5_3/optimal_value_no_usable_ace.png' width=40.25%>
+</div>
