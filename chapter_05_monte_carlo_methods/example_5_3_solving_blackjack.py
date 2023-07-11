@@ -78,12 +78,12 @@ def monte_carlo_es(num_episodes=10_000, save_record=False) -> np.ndarray:
 if __name__ == "__main__":
 
     num_episodes = 500_000
-    # Q, policy = monte_carlo_es(num_episodes, save_record=True)
+    Q, policy = monte_carlo_es(num_episodes, save_record=True)
 
-    with open('./history/example_5_3.pkl', 'rb') as f:
-        record = pickle.load(f)
-        Q = record['Q']
-        policy = record['policy']
+    # with open('./history/example_5_3.pkl', 'rb') as f:
+    #     record = pickle.load(f)
+    #     Q = record['Q']
+    #     policy = record['policy']
 
     V = np.max(Q, axis=-1)
 
