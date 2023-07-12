@@ -16,7 +16,7 @@ def prob_target_policy(player_sum:int, action:int) -> float:
 
 
 # Get probability of the action given a state from the behaviro policy
-def prob_behavior_policy():
+def prob_behavior_policy() -> float:
     return 0.5 # as defined in the book
 
 
@@ -26,7 +26,7 @@ def get_action() -> int:
 
 
 # Calculate MSE loss between given value and target value
-def mse(val_1, val_2):
+def mse(val_1:float, val_2:float) -> float:
     return np.sqrt((val_1 - val_2) ** 2)
 
 
@@ -37,6 +37,22 @@ def init_start_state(env:Any, start_state:tuple) -> tuple:
         observation, info = env.reset()
     return env, observation
 
+
+# plotting function
+def plot_result(history:dict) -> None:
+    ord_hist = value_hist['ordinary'].mean(axis=0)
+    weighted_hist = value_hist['weighted'].mean(axis=0)
+
+    plt.figure(figsize=(10, 6))
+
+    x = np.arange(len(ord_hist))
+    plt.xscale('log')
+    plt.xticks([1, 10, 100, 1000, 10000], ['1', '10', '100', '1000', '10,000'])
+
+    plt.plot(x, weighted_hist, label='Weighted importance sampling')
+    plt.plot(x, ord_hist, label='Ordinary importance sampling')
+    plt.legend()
+    plt.show()
 
 # run monte carlo off-policy importance sampling 
 def monte_carlo_importance_sampling(total_rounds:int, 
@@ -88,9 +104,8 @@ def monte_carlo_importance_sampling(total_rounds:int,
                     V_ord += W * G
                     tau += 1
                     # Update weighted sampling value
+                    V_wei += W * G
                     C = C + W
-                    if C != 0:
-                        V_wei = V_wei + (W / C) * (G - V_wei)
 
                 # update the importance sampling ratio
                 prob_pi = prob_target_policy(state[0], action)
@@ -98,7 +113,7 @@ def monte_carlo_importance_sampling(total_rounds:int,
                 W = W * (prob_pi / prob_behav)
 
             # Get MSE loss between current values and the target value
-            mse_wei = mse(V_wei, target_val)
+            mse_wei = mse(V_wei / C if C != 0 else 0, target_val)
             mse_ord = mse(V_ord / tau, target_val)
             value_hist['weighted'][r, t] = mse_wei
             value_hist['ordinary'][r, t] = mse_ord
@@ -115,14 +130,9 @@ if __name__ ==  "__main__":
     total_rounds = 20
     episodes_per_round = 10_000
 
-    value_hist = monte_carlo_importance_sampling(total_rounds, episodes_per_round)
+    # value_hist = monte_carlo_importance_sampling(total_rounds, episodes_per_round, save_record=True)
 
-    # ord_hist = value_hist['ordinary'].mean(axis=0)
-    # weighted_hist = value_hist['weighted'].mean(axis=0)
+    with open('./history/example_5_4.pkl', 'rb') as f:
+        value_hist = pickle.load(f)
 
-    # x = np.arange(len(ord_hist))
-    # plt.xscale('log')
-    # plt.plot(x, weighted_hist, label='wei')
-    # plt.plot(x, ord_hist, label='ord')
-    # plt.legend()
-    # plt.show()
+    plot_result(value_hist)
