@@ -76,6 +76,7 @@ def plot_result(value_hist:dict) -> None:
     plt.savefig('./plots/example_5_4.png')
 
 
+
 # run monte carlo off-policy importance sampling 
 def monte_carlo_importance_sampling(total_rounds:int, 
                                     episodes_per_round:int, 
@@ -134,7 +135,6 @@ def monte_carlo_importance_sampling(total_rounds:int,
                     V_wei += W * G
                     rho = rho + W
 
-
             # Get MSE loss between current values and the target value
             mse_wei = mse(V_wei / rho if rho != 0 else 0, target_val)
             mse_ord = mse(V_ord / count, target_val)
@@ -153,9 +153,9 @@ if __name__ ==  "__main__":
     total_rounds = 20
     episodes_per_round = 10_000
 
-    # value_hist = monte_carlo_importance_sampling(total_rounds, episodes_per_round, save_record=True)
+    value_hist = monte_carlo_importance_sampling(total_rounds, episodes_per_round, save_record=True)
 
-    with open('./history/example_5_4.pkl', 'rb') as f:
-        value_hist = pickle.load(f)
+    # with open('./history/example_5_4.pkl', 'rb') as f:
+        # value_hist = pickle.load(f)
 
     plot_result(value_hist)
