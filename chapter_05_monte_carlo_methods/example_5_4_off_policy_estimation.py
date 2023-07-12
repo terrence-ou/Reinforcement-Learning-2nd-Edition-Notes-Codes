@@ -21,9 +21,11 @@ def prob_target_policy(player_sum:int, action:int) -> float:
 def prob_behavior_policy():
     return 0.5 # as defined in the book
 
+# get random action
 def get_action() -> int:
     return np.random.choice([0, 1], p=[0.5, 0.5])
 
+# Calculate MSE loss between given value and target value
 def mse(val_1, val_2):
     return np.sqrt((val_1 - val_2) ** 2)
 
@@ -37,11 +39,12 @@ def init_start_state(env:Any, start_state:tuple) -> tuple:
 
 
 if __name__ ==  "__main__":
+
     start_state = (13, 2, 1) # player sum = 13, dealer face = 2, usable ace = 1
     target_val = -0.27726 # Provided in the book
-    total_episodes = 1_00
+    total_episodes = 1_000
     gamma = 1.0
-    n_rounds = 10
+    n_rounds = 1
 
     record = {'G': 0., 'tau': 0, 'rho': 0.}
     value_hist = {'ordinary': np.zeros(shape=(n_rounds, total_episodes)),
@@ -49,14 +52,15 @@ if __name__ ==  "__main__":
 
     env = gym.make('Blackjack-v1', sab=True)
 
-    # for t in tqdm(range(total_episodes)):
+
     for r in range(n_rounds):
 
         V_ord = 0
         V_wei = 0
         C = 0
+        tau = 0
 
-        for t in range(total_episodes):
+        for t in tqdm(range(total_episodes)):
             terminated = False
             env, observation = init_start_state(env, start_state)
             state = observation # for uniform naming purpose
@@ -73,24 +77,39 @@ if __name__ ==  "__main__":
                 action = get_action()
             
             G = 0
-            # rho = 1.0
             W = 1.0
-            while traj:
+        
+            while traj:                
                 state, action, reward = traj.pop()
                 G = gamma * G + reward
-                if state == start_state:
-                    C = C + W
-                    V_wei = V_wei + (W / C) * (G - V_wei)
-                    V_wei = V_wei + (G - V_wei)
-                    prob_pi = prob_target_policy(state[0], action)
-                    prob_behav = prob_behavior_policy()
-                    W = W * (prob_pi / prob_behav)
-            
-            mse_wei = mse(V_wei, target_val)
-            value_hist['weighted'][r, t] = mse_wei
 
-            # record['G'] += G
-            # record['tau'] += 1  # first visit
-            # record['rho'] += rho
-    plt.plot(value_hist['weighted'].mean(axis=0))
+                if state == start_state and state not in seen:                    
+                    
+                    seen.add(state)
+                    
+                    V_ord += W * G
+                    tau += 1
+                    C = C + W
+                    
+                    if C != 0:
+                        V_wei = V_wei + (W / C) * (G - V_wei)
+
+                prob_pi = prob_target_policy(state[0], action)
+                prob_behav = prob_behavior_policy()
+                W = W * (prob_pi / prob_behav)
+
+
+            mse_wei = mse(V_wei, target_val)
+            mse_ord = mse(V_ord / tau, target_val)
+            value_hist['weighted'][r, t] = mse_wei
+            value_hist['ordinary'][r, t] = mse_ord
+
+    ord_hist = value_hist['ordinary'].mean(axis=0)
+    weighted_hist = value_hist['weighted'].mean(axis=0)
+
+    x = np.arange(total_episodes)
+    plt.xscale('log')
+    plt.plot(x, weighted_hist, label='wei')
+    plt.plot(x, ord_hist, label='ord')
+    plt.legend()
     plt.show()
