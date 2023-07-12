@@ -39,20 +39,42 @@ def init_start_state(env:Any, start_state:tuple) -> tuple:
 
 
 # plotting function
-def plot_result(history:dict) -> None:
+def plot_result(value_hist:dict) -> None:
+
+    line_width = 1.5
+    fontdict = {'fontsize': 12, 'fontweight': 'bold'}
+
     ord_hist = value_hist['ordinary'].mean(axis=0)
     weighted_hist = value_hist['weighted'].mean(axis=0)
 
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(10, 6), dpi=150)
+    plt.ylim((0.0, 2.0))
+    plt.grid(c='lightgray')
+    plt.margins(0.02)
+
+    # get rid of the top/right frame lines
+    for i, spine in enumerate(plt.gca().spines.values()):
+        if i in [0, 2]: 
+            spine.set_linewidth(1.5)
+            continue
+        spine.set_visible(False)
 
     x = np.arange(len(ord_hist))
     plt.xscale('log')
     plt.xticks([1, 10, 100, 1000, 10000], ['1', '10', '100', '1000', '10,000'])
 
-    plt.plot(x, weighted_hist, label='Weighted importance sampling')
-    plt.plot(x, ord_hist, label='Ordinary importance sampling')
-    plt.legend()
-    plt.show()
+    plt.plot(x, weighted_hist, linewidth=line_width, c='tomato',
+             label='Weighted importance sampling')
+    plt.plot(x, ord_hist, linewidth=line_width, c='lightseagreen',
+             label='Ordinary importance sampling')
+    
+    plt.xlabel('Episodes (log scale)', fontdict=fontdict)
+    plt.ylabel('Mean square error\n(avg. over 20 runs)', fontdict=fontdict)
+
+    plt.legend(loc=7)
+    # plt.show()
+    plt.savefig('./plots/example_5_4.png')
+
 
 # run monte carlo off-policy importance sampling 
 def monte_carlo_importance_sampling(total_rounds:int, 
@@ -74,8 +96,8 @@ def monte_carlo_importance_sampling(total_rounds:int,
         # Initialize episode-wise variables
         V_ord = 0 # Values of the ordinary sampling
         V_wei = 0 # Values of the weighted sampling
-        C = 0 # cumulative sum
-        tau = 0 # the number of the state been visited
+        rho = 0 # cumulative sum
+        count = 0 # the number of the state been visited
 
         # Epsode
         for t in tqdm(range(total_episodes)):
@@ -99,22 +121,23 @@ def monte_carlo_importance_sampling(total_rounds:int,
             while traj:                
                 state, action, reward = traj.pop()
                 G = gamma * G + reward
-                if state == start_state:                    
-                    # Update ordinary sampling value
-                    V_ord += W * G
-                    tau += 1
-                    # Update weighted sampling value
-                    V_wei += W * G
-                    C = C + W
-
                 # update the importance sampling ratio
                 prob_pi = prob_target_policy(state[0], action)
                 prob_behav = prob_behavior_policy()
                 W = W * (prob_pi / prob_behav)
 
+                if state == start_state:                    
+                    # Update ordinary sampling value
+                    V_ord += W * G
+                    count += 1
+                    # Update weighted sampling value
+                    V_wei += W * G
+                    rho = rho + W
+
+
             # Get MSE loss between current values and the target value
-            mse_wei = mse(V_wei / C if C != 0 else 0, target_val)
-            mse_ord = mse(V_ord / tau, target_val)
+            mse_wei = mse(V_wei / rho if rho != 0 else 0, target_val)
+            mse_ord = mse(V_ord / count, target_val)
             value_hist['weighted'][r, t] = mse_wei
             value_hist['ordinary'][r, t] = mse_ord
     
