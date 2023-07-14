@@ -6,7 +6,7 @@ from tqdm import tqdm
 import pickle
 
 
-# Get probability of the action given a state from target policy
+# Get probability of an action given a state based on the target policy
 def prob_target_policy(player_sum:int, action:int) -> float:
     if player_sum >= 20 and action == 0:
         return 1.
@@ -15,7 +15,7 @@ def prob_target_policy(player_sum:int, action:int) -> float:
     return 0.
 
 
-# Get probability of the action given a state from the behaviro policy
+# Get probability of an action given a state based on the behaviro policy
 def prob_behavior_policy() -> float:
     return 0.5 # as defined in the book
 
