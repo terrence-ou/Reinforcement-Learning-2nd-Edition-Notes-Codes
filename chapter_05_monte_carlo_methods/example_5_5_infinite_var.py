@@ -34,12 +34,41 @@ def prob_behavior_policy() -> float:
 
 
 def plot_result(value_hist:np.ndarray) -> None:
-    raise NotImplementedError
+    
+    line_width = 1.0
+    fontdict = {'fontsize': 12, 'fontweight': 'bold'}
+
+    plt.figure(figsize=(10, 6), dpi=150)
+    plt.ylim((0.0, 3.5))
+    plt.grid(c='lightgray')
+    plt.margins(0.02)
+
+    for i, spine in enumerate(plt.gca().spines.values()):
+        if i in [0, 2]:
+            spine.set_linewidth(1.5)
+            continue
+        spine.set_visible(False)
+    
+    x = np.arange(value_hist.shape[1])
+    plt.xscale('log')
+    plt.xticks([1, 10, 100, 1000, 10_000, 100_000, 1_000_000], 
+               ['1', '10', '100', '1000', '10,000', '100,000', '1,000,000'])
+    plt.yticks([0, 1, 2])
+
+    for i in range(len(value_hist)):
+        plt.plot(x, value_hist[i], linewidth=line_width)
+
+    plt.xlabel('Episodes (log scale)', fontdict=fontdict)
+    plt.ylabel('Monte-Carlo\nestimate of\n$v_\pi(s)$ with\nordinary\nimportance\nsampling\n(ten runs)', 
+               fontdict=fontdict, rotation=0, 
+               labelpad=50, verticalalignment='center')    
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('./plots/example_5_5.png')
 
 
 def monte_carlo_importance_sampling(total_rounds:int,
-                                    episode_per_round:int,
-                                    save_record:bool=True) -> np.ndarray:
+                                    episode_per_round:int) -> np.ndarray:
     
     value_hist = np.zeros(shape=(total_rounds, episode_per_round))
     
@@ -58,7 +87,6 @@ def monte_carlo_importance_sampling(total_rounds:int,
             terminated = False
             
             traj = []
-            seen = set()
 
             while not terminated:
                 next_state, reward, terminated = random_move(action)
@@ -91,13 +119,8 @@ def monte_carlo_importance_sampling(total_rounds:int,
 
 if __name__ == "__main__":
     total_rounds = 10
-    episode_per_round = 100_000
+    episode_per_round = 1_000_000
 
     value_hist = monte_carlo_importance_sampling(total_rounds, episode_per_round)
     
-    plt.xscale('log')
-    plt.ylim((0, 3.5))
-    for i in range(total_rounds):
-        plt.plot(value_hist[i])
-    
-    plt.show()
+    plot_result(value_hist)
