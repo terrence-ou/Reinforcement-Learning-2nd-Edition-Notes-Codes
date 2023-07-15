@@ -50,7 +50,7 @@ Evaluate the state in which the dealer is showing a deuce, the sum of the player
 
 
 ### 5.5 Infinite Variance (*p.107*)
-Ordinary importance sampling produces surprisingly unstable estimates on the one-state MDP shown inset. The correct estimate here is 1 ($\gamma$ = 1), and, even though this is the expected value of a sample return (after importance sampling), the variance of the samples is infinite, and the estimates do not converge to this value. These results are for on-policy every-visit MC. [Code](./example_5_5_infinite_var.py)
+Ordinary importance sampling produces surprisingly unstable estimates on the one-state MDP shown inset. The correct estimate here is 1 ($\gamma$ = 1), and, even though this is the expected value of a sample return (after importance sampling), the variance of the samples is infinite, and the estimates do not converge to this value. These results are for on-policy every-visit MC. [Code](example_5_5_infinite_var.py)
 <br>
 <p align="center">
     <img src='./plots/example_5_5.png' width=80%>
