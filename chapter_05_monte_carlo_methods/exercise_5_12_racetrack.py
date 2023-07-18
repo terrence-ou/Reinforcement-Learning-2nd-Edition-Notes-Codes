@@ -30,20 +30,18 @@ def behavior_pi(state:tuple,
 def off_policy_monte_carlo(track_map:str, render_mode:str):
 
     gamma = 0.9
-    epsilon = 0.9
-    total_episodes = 10_000
+    epsilon = 0.1
+    total_episodes = 100_000
 
     env = RaceTrack(track_map, render_mode, size=20)
     action_space = env.nA # (9, ), nine actions in total
     observation_space = env.nS # (curr_row, curr_col, row_speed, col_speed)
 
-    Q = np.zeros(shape=(*observation_space, action_space), dtype=np.float64)
+    Q = np.random.normal(size=(*observation_space, action_space)) - 500
     C = np.zeros_like(Q)
     target_pi = np.argmax(Q, axis=-1)
 
     for i in range(total_episodes):
-        # if i % 1000 == 0:
-            # epsilon *= 0.95
         
         # Generate a trajectory using behaviro policy
         trajectory = []
@@ -74,11 +72,11 @@ def off_policy_monte_carlo(track_map:str, render_mode:str):
                 break
             W = W * (1 / act_prob)
         
-        if i % 100 == 0:
+        if i % 1000 == 0:
             print(f'Episode: {i}, reward: {ttl_reward}, epsilon: {epsilon}')
 
 
 if __name__ == "__main__":
 
 
-    off_policy_monte_carlo('b', None)
+    off_policy_monte_carlo('a', None)
