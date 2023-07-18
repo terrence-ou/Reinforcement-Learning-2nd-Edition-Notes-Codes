@@ -6,10 +6,13 @@ from gymnasium import Env, spaces
 
 import pygame
 
+STARTING = 0.8
+FINISHING = 0.4
 
+# Race track environment
 class RaceTrack(Env):
 
-    metadata = {'render_modes': ['human', 'rgb_array'], 'render_fps': 4}
+    metadata = {'render_modes': ['human', 'rgb_array'], 'render_fps': 20}
 
     def __init__(self, track_map:str, render_mode:str=None, size:int=2):
         self.size = size
@@ -25,8 +28,11 @@ class RaceTrack(Env):
         self.window_size = self.track_map.shape
         # Pygame's coordinate if the transpose of that of numpy
         self.window_size = (self.window_size[1] * self.size, self.window_size[0] * self.size)
+        self.window = None # window for pygame rendering
+        self.clock = None # clock for pygame ticks
+
         # Get start states
-        self.start_states = np.dstack(np.where(self.track_map==0.8))[0]
+        self.start_states = np.dstack(np.where(self.track_map==STARTING))[0]
 
         # Define the observation space and action space
         # self.observation_space = {
@@ -43,6 +49,7 @@ class RaceTrack(Env):
         self.state = None # Initialize state
         self.speed = None # Initialize speed
 
+        # Mapping the integer action to acceleration tuple
         self._action_to_acceleration = {
             0: (-1, -1),
             1: (-1, 0),
@@ -55,16 +62,38 @@ class RaceTrack(Env):
             8: (1, 1)
         }
 
-        self.window = None
-        self.clock = None
 
-
+    # Get observation
     def _get_obs(self):
         return (*self.state, *self.speed)
-
+    # Get info, always return None in our case
     def _get_info(self):
         return None
-    
+
+    # Check if the race car go accross the finishing line
+    def _check_finish(self):
+        finish_states = np.where(self.track_map == FINISHING)
+        rows = finish_states[0]
+        col = finish_states[1][0]
+        if self.state[0] in rows and self.state[1] >= col:
+            return True
+        return False
+
+    # Check if the track run out of the track
+    def _check_out_track(self, next_state):
+        row, col = next_state
+        H, W = self.track_map.shape
+        # If the car go out of the boundary 
+        if row < 0 or row >= H or col < 0 or col >= W:
+            return True
+        # Check if the car run into the gravels
+        # print(next_state)
+        if self.track_map[next_state[0], next_state[1]] == 0:
+            return True
+        return False
+
+
+    # reset the car to one of the starting positions
     def reset(self):
         start_idx = np.random.choice(self.start_states.shape[0])
         self.state = self.start_states[start_idx]
@@ -73,8 +102,42 @@ class RaceTrack(Env):
             self.render(self.render_mode)
         return self._get_obs(), self._get_info()
 
+    # take actions
+    def step(self, action):
+        # Get new acceleration and updated position
+        new_state = np.copy(self.state)
+        y_act, x_act = self._action_to_acceleration[action]
+        
+        temp_y_acc = self.speed[0] + y_act
+        temp_x_acc = self.speed[1] + x_act
+        
+        if temp_y_acc < -4: temp_y_acc = -4
+        # if temp_y_acc > 4: temp_y_acc = 4
+        if temp_y_acc > 0: temp_y_acc = 0
+        if temp_x_acc < -4: temp_x_acc = -4
+        # if temp_x_acc < 0: temp_x_acc = 0
+        if temp_x_acc > 4: temp_x_acc = 4
+        
+        new_state[0] += temp_y_acc
+        new_state[1] += temp_x_acc
+        
+        terminated = False
+        # check next position
+        if self._check_finish():
+            terminated = True 
+        elif self._check_out_track(new_state):
+            self.reset()
+        else:
+            self.state = new_state
+            self.speed = (temp_y_acc, temp_x_acc)
+        if self.render_mode == 'human':
+            self.render(self.render_mode)
+        
+        return self._get_obs(), -1, terminated
 
 
+
+    # visualize race map
     def render(self, mode):
         if self.window is None:
             pygame.init()
@@ -86,22 +149,35 @@ class RaceTrack(Env):
 
         rows, cols = self.track_map.shape
         self.window.fill((255, 255, 255))
-        # pygame.draw.rect(self.window, (255, 0, 0), (400, 400, 20, 20), 0)
         
+        # Draw the map
         for row in range(rows):
             for col in range(cols):
+                cell_val = self.track_map[row, col]
+                if cell_val == 0.4:
+                    fill = (255, 0, 0)
+                    pygame.draw.rect(self.window, fill, (col * self.size, row * self.size, self.size, self.size), 0)
+                elif cell_val == 0.8:
+                    fill = (0, 255, 0)            
+                    pygame.draw.rect(self.window, fill, (col * self.size, row * self.size, self.size, self.size), 0)
+        
                 color = (0, 0, 0)
-                if self.track_map[row, col] == 0:
+                if cell_val == 0:
+                    color = (255, 255, 255)
+                elif cell_val == 1:
                     color = (100, 100, 100)
-                elif self.track_map[row, col] == 1:
-                    color = (200, 200, 200)
                 pygame.draw.rect(self.window, color, (col * self.size, row * self.size, self.size, self.size), 1)
+        
+        # Draw the car
+        pygame.draw.rect(self.window, (0, 0, 255), (self.state[1] * self.size, self.state[0] * self.size, self.size, self.size), 0)
+
 
         # if mode == "human":
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pass
+                self.window = None
+                pygame.quit()
         self.clock.tick(self.metadata['render_fps'])
 
 
@@ -109,25 +185,14 @@ class RaceTrack(Env):
 
 if __name__ == '__main__':
 
-    env = RaceTrack('a', render_mode='human', size=20)
-    while True:
-        env.reset()
-    # pygame.init()
-    # SCREENWIDTH = 800
-    # SCREENHEIGHT = 800
-    # RED = (255,0,0)
-    # screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-
-    # pygame.draw.rect(screen, RED, (400, 400, 20, 20),0)
-    # screen.fill(RED)
-
-    # pygame.display.update()
-
-    # # waint until user quits
-    # running = True
-    # while running:
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             running = False
-
-    # pygame.quit()
+    env = RaceTrack('a', render_mode=None, size=20)
+    env.reset()
+    total_reward = 0
+    terminated = False
+    while not terminated:
+        action = np.random.choice(env.nA)
+        observation, reward, terminated = env.step(action)
+        total_reward += reward
+        if terminated: print(observation, reward, terminated, total_reward)
+    # while True:
+    #     env.reset()
