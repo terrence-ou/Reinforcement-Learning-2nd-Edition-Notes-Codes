@@ -56,3 +56,31 @@ Ordinary importance sampling produces surprisingly unstable estimates on the one
 <p align="center">
     <img src='./plots/example_5_5.png' width=80%>
 </p>
+
+## Exercise
+
+### 5.12 Racetrack (*p.112*)
+
+Consider driving a race car around a turn like those shown in Figure 5.5 (*p.112*). You want to go as fast as possible, but not so fast as to run out of the track. In our simplified racetrack, the car is at one of a discrete set of grid positions, the cells in the diagram. The velocity is also discrete, a number of grid cells moved horizontally and vertically per time step. The actions are increments to the velocity components. [Code](./exercise_5_12_racetrack.py)
+
+**Track A** <br>
+Training record:
+<p align="center">
+    <img src='./plots/exercise_5_12/track_a.png' width=80%>
+</p>
+Sample trajectories:
+
+<p align="center">
+    <img src='./plots/exercise_5_12/track_a_paths.png' width=95%>
+</p>
+
+**Track B** <br>
+Training record:
+<p align="center">
+    <img src='./plots/exercise_5_12/track_b.png' width=80%>
+</p>
+Sample trajectories:
+
+<p align="center">
+    <img src='./plots/exercise_5_12/track_b_paths.png' width=95%>
+</p>
