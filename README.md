@@ -51,7 +51,8 @@ The dynamic programming (DP) methods introduced in this chapter includes policy 
 
 ### **Chapter 5: Monte Carlo Methods**  &nbsp; &nbsp; :link: [link](/chapter_05_monte_carlo_methods/)
 
-*in progress*
+Monte Carlo methods can be used to learn optimal behavior directly from interaction with the environment, with no model of the environment's dynamics. The chapter introduces on-policy MC methods like first-visit Monte Carlo prediction with/without Exploring Starts, and off-policy MC methods like ordinary/weighted importance sampling.
+
 - The infinite variance of ordinary importance sampling
 
 <div align='center'>
@@ -67,3 +68,7 @@ The dynamic programming (DP) methods introduced in this chapter includes policy 
 <div align='center'>
     <img src='./chapter_05_monte_carlo_methods/plots/exercise_5_12/track_b_paths.png' width=80%>
 </div>
+
+### **Chapter 6: Temporal-Difference Learning**
+
+*In progress*
