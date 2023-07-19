@@ -52,9 +52,18 @@ The dynamic programming (DP) methods introduced in this chapter includes policy 
 ### **Chapter 5: Monte Carlo Methods**  &nbsp; &nbsp; :link: [link](/chapter_05_monte_carlo_methods/)
 
 *in progress*
-- Jack's Car Rental example
+- The infinite variance of ordinary importance sampling
 
 <div align='center'>
-    <img src='./chapter_05_monte_carlo_methods/plots/example_5_3/optimal_policy_no_usable_ace.png' width=45%>
-    <img src='./chapter_05_monte_carlo_methods/plots/example_5_3/optimal_value_no_usable_ace.png' width=40.25%>
+    <img src='./chapter_05_monte_carlo_methods/plots/example_5_5.png' width=70%>
+</div>
+
+- Racetrack
+
+<div align='center'>
+    <img src='./chapter_05_monte_carlo_methods/plots/exercise_5_12/track_b.png' width=70%>
+</div>
+
+<div align='center'>
+    <img src='./chapter_05_monte_carlo_methods/plots/exercise_5_12/track_b_paths.png' width=80%>
 </div>
