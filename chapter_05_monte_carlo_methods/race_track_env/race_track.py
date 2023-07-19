@@ -12,7 +12,7 @@ FINISHING = 0.4
 # Race track environment
 class RaceTrack(Env):
 
-    metadata = {'render_modes': ['human', 'rgb_array'], 'render_fps': 20}
+    metadata = {'render_modes': ['human', 'rgb_array'], 'render_fps': 6}
 
     def __init__(self, track_map:str, render_mode:str=None, size:int=2):
         self.size = size
@@ -35,18 +35,8 @@ class RaceTrack(Env):
         # Get start states
         self.start_states = np.dstack(np.where(self.track_map==STARTING))[0]
 
-        # Define the observation space and action space
-        # self.observation_space = {
-        #     'row': spaces.Discrete(self.track_map.shape[0]),
-        #     'col': spaces.Discrete(self.track_map.shape[1]),
-        #     'speed_row': spaces.Discrete(9), # range(-4, 5)
-        #     'speed_col': spaces.Discrete(9), # range(-4, 5)
-        # }
-        # self.action_space = spaces.Discrete(9)
-
-        # Define the shape of observations and actions
-        self.nS = (*self.track_map.shape, 9, 9)
-        self.nA = 9
+        self.nS = (*self.track_map.shape, 5, 9) # observation space
+        self.nA = 9 # action space
         self.state = None # Initialize state
         self.speed = None # Initialize speed
 
@@ -91,6 +81,13 @@ class RaceTrack(Env):
         # Check if the car run into the gravels
         if self.track_map[next_state[0], next_state[1]] == 0:
             return True
+        
+        # Check if part of the path run into gravels
+        for row_step in range(self.state[0], row, -1):
+            if self.track_map[row_step, self.state[1]] == 0: return True
+        for col_step in range(self.state[1], col, 1 if col > self.state[1] else -1):
+            if self.track_map[row, col_step] == 0: return True
+
         return False
 
 
