@@ -163,7 +163,8 @@ if __name__ == "__main__":
         policy = np.argmax(Q, axis=-1) # greedy policy
         
         env = RaceTrack(track_sel, None, 20)
-        fig = plt.figure(figsize=(10, 4), dpi=150)
+        fig = plt.figure(figsize=(12, 5), dpi=150)
+        fig.suptitle('Sample trajectories', size=12, weight='bold')
 
         for i in range(10):
             track_map = np.copy(env.track_map)
