@@ -1,8 +1,5 @@
-import os
-from os import path
 import numpy as np
-import gymnasium as gym
-from gymnasium import Env, spaces
+from gymnasium import Env
 
 import pygame
 
@@ -31,6 +28,7 @@ class RaceTrack(Env):
         self.window_size = (self.window_size[1] * self.size, self.window_size[0] * self.size)
         self.window = None # window for pygame rendering
         self.clock = None # clock for pygame ticks
+        self.truncated = False
 
         # Get start states
         self.start_states = np.dstack(np.where(self.track_map==STARTING))[0]
@@ -134,7 +132,7 @@ class RaceTrack(Env):
         if self.render_mode == 'human':
             self.render(self.render_mode)
         
-        return self._get_obs(), -1, terminated
+        return self._get_obs(), -1, terminated, self.truncated
 
 
     # visualize race map
@@ -179,13 +177,14 @@ class RaceTrack(Env):
         pygame.draw.rect(self.window, (86, 61, 227), (self.state[1] * self.size, self.state[0] * self.size, self.size, self.size), 0)
 
 
-        # if mode == "human":
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.window = None
-                pygame.quit()
-        self.clock.tick(self.metadata['render_fps'])
+        if mode == "human":
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.window = None
+                    pygame.quit()
+                    self.truncated = True
+            self.clock.tick(self.metadata['render_fps'])
 
 
 
@@ -198,9 +197,10 @@ if __name__ == '__main__':
     env.reset()
     total_reward = 0
     terminated = False
-    while not terminated:
+    truncated = False
+    while not terminated and not truncated:
         action = np.random.choice(env.nA)
-        observation, reward, terminated = env.step(action)
+        observation, reward, terminated, truncated = env.step(action)
         total_reward += reward
         if terminated: print(observation, reward, terminated, total_reward)
     # while True:
