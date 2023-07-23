@@ -99,9 +99,9 @@ def off_policy_monte_carlo(total_episodes:int,
         while not terminated:
             if zero_acc and np.random.rand() <= 0.1:
                 non_acc_act = 4 # check env._action_to_acceleration
-                observation, reward, terminated = env.step(non_acc_act)
+                observation, reward, terminated, _ = env.step(non_acc_act)
             else:
-                observation, reward, terminated = env.step(action)
+                observation, reward, terminated, _ = env.step(action)
             
             ttl_reward += reward
             trajectory.append((state, action, reward, act_prob))
@@ -131,7 +131,7 @@ def off_policy_monte_carlo(total_episodes:int,
 
 if __name__ == "__main__":
 
-    train = False # Switch between train and evaluation
+    train = True # Switch between train and evaluation
     track_sel = 'a'
     total_episodes = 1_000_000
 
