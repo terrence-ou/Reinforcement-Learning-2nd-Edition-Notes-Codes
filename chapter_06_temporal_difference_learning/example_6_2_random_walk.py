@@ -13,7 +13,7 @@ class Node:
 
     def __eq__(self, other_val) -> bool:
         return self.value == other_val
-    
+
     def __repr__(self) -> str:
         return f"Node {self.value}"
 
@@ -22,11 +22,33 @@ class Node:
 class RandomWalk:
     def __init__(self):
         self.states = ["A", "B", "C", "D", "E"]
-        self.state_idx_map = {letter: idx for idx, letter in enumerate(self.states)}
+        # We need to make the mapping start from 1 and reserve 0 for the terminal state
+        self.state_idx_map = {letter: idx + 1 for idx, letter in enumerate(self.states)}
+        self.initial_state = "C"
+        self.initial_idx = self.state_idx_map[self.initial_state]
+        # Build environment as a linked list
         self.nodes = self.build_env()
+        self.reset()
 
     def step(self, action: int) -> tuple:
-        raise NotImplementedError
+        assert action in [0, 1], "Action should be 0 or 1"
+
+        if action == 0:
+            reward = self.state.l_reward
+            next_state = self.state_idx_map[self.state.value] - 1
+            self.state = self.state.left
+        else:
+            reward = self.state.r_reward
+            next_state = self.state_idx_map[self.state.value] + 1
+            self.state = self.state.right
+
+        terminated = False if self.state else True
+        return next_state, reward, terminated
+
+    def reset(self):
+        self.state = self.nodes
+        while self.state != self.initial_state:
+            self.state = self.state.right
 
     # building the random walk environment as a linked list
     def build_env(self) -> Node:
@@ -48,11 +70,43 @@ class RandomWalk:
 
 # Check the nodes and rewards
 def check_RandomWalk_nodes():
+    # Check environment setup
+    print("\n=====Test 1, checking environment setup=====\n")
     head = RandomWalk().build_env()
     while head:
         print("Links: \t", head.left, "←", head, "→", head.right)
         print("Reward: \t", head.l_reward, "←", head, "→", head.r_reward, "\n")
         head = head.right
+
+    # Check if the right-forward sequence correct
+    print("\n=====Test 2: move all the way right=====\n")
+
+    env = RandomWalk()
+    terminated = False
+    print("Initial state: ", env.state, env.initial_idx)
+    while not terminated:
+        next_state, reward, terminated = env.step(1)
+        print(env.state, "\t", next_state, "reward: ", reward, "terminated:" ,terminated)
+
+    # Check if the left-forward sequence correct
+    print("\n=====Test 3: move all the way left=====\n")
+    
+    env.reset()
+    terminated = False
+    print("Initial state: ", env.state, env.initial_idx)
+    while not terminated:
+        next_state, reward, terminated = env.step(0)
+        print(env.state, "\t", next_state, "reward: ", reward, "terminated:" ,terminated)
+
+    # Check if random move generate correct trajectory
+    print("\n=====Test 4: Random moves=====\n")
+    env.reset()
+    terminated = False
+    print("Initial state: ", env.state, env.initial_idx)
+    while not terminated:
+        rand_action = np.random.choice(2)
+        next_state, reward, terminated = env.step(rand_action)
+        print(env.state, "\t", next_state, "reward: ", reward, "terminated:" ,terminated)
 
 
 if __name__ == "__main__":
