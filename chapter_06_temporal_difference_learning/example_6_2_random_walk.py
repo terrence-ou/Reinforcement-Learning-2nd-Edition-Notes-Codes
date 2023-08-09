@@ -125,9 +125,9 @@ def rms(V_hist: np.ndarray, true_value: np.ndarray) -> np.ndarray:
 
 # Run TD evaluation for given episodes
 def parameter_sweep_td(
-    alpha_list: list, num_episodes: int, true_value: np.ndarray
-) -> None:
-    num_runs = 100
+    alpha_list: list, num_episodes: int, num_runs: int, true_value: np.ndarray
+) -> list:
+    error_hist = []
     V_hist = np.zeros(shape=(num_runs, num_episodes, 5))
     for alpha in alpha_list:
         for i in range(num_runs):
@@ -135,13 +135,15 @@ def parameter_sweep_td(
             V_hist[i] = v_single[:, 1:-1]
 
         error = rms(V_hist, true_value)
-        plt.plot(error)
-    # plt.show()
+        error_hist.append(error)
+    return error_hist
 
 
 # Run MC evaluation for given episodes
-def parameter_sweep_mc(alpha_list, num_episodes, true_value) -> None:
-    num_runs = 100
+def parameter_sweep_mc(
+    alpha_list: list, num_episodes: int, num_runs: int, true_value: np.ndarray
+) -> list:
+    error_hist = []
     V_hist = np.zeros(shape=(num_runs, num_episodes, 5))
     for alpha in alpha_list:
         for i in range(num_runs):
@@ -149,23 +151,80 @@ def parameter_sweep_mc(alpha_list, num_episodes, true_value) -> None:
             V_hist[i] = v_single[:, 1:-1]
 
         error = rms(V_hist, true_value)
-        plt.plot(error)
-    # plt.show()
+        error_hist.append(error)
+    return error_hist
+
+
+def algorithm_comparison(
+    num_episodes: int, num_runs: int, true_value: np.ndarray
+) -> None:
+    # param sweeps on both algorithms
+    alpha_list_mc = [0.01, 0.02, 0.03, 0.04]
+    mc_error_hist = parameter_sweep_mc(
+        alpha_list_mc, num_episodes, num_runs, true_value
+    )
+    alpha_list_td = [0.05, 0.1, 0.15]
+    td_error_hist = parameter_sweep_td(
+        alpha_list_td, num_episodes, num_runs, true_value
+    )
+
+    # Plotting the result
+    font_dict = {"fontsize": 11}
+    colors = ["mediumseagreen", "steelblue", "orchid"]
+
+    plt.figure(figsize=(9, 6), dpi=150)
+    plt.grid(c="lightgray")
+    plt.margins(0.02)
+    for i, spine in enumerate(plt.gca().spines.values()):
+        if i in [0, 2]:
+            spine.set_linewidth(1.5)
+            continue
+        spine.set_visible(False)
+
+    plt.xlabel("Walks/Episodes", fontdict=font_dict)
+    plt.ylabel("RMS error", fontdict=font_dict)
+
+    # plot MC errors with different line styles
+    color = colors[2]
+    line_types = [(5, (10, 3)), (0, (5, 5)), (0, (5, 0)), (0, (1, 1))]
+    for i, error in enumerate(mc_error_hist):
+        plt.plot(
+            error,
+            c=color,
+            linewidth=1.5,
+            linestyle=line_types[i],
+            label=f"MC $\\alpha={alpha_list_mc[i]}$",
+        )
+
+    # plot TD errors with different line weights
+    color = colors[1]
+    linewidths = [1.8, 1.3, 0.9]
+    for i, error in enumerate(td_error_hist):
+        plt.plot(
+            error,
+            c=color,
+            linewidth=linewidths[i],
+            label=f"TD $\\alpha$={alpha_list_td[i]}",
+        )
+
+    plt.title(
+        "Empirical RMS error, averaged over states and 100 runs",
+        fontsize=13,
+        fontweight="bold",
+    )
+    plt.legend()
+    plt.savefig("./plots/example_6_2/rms_compare.png")
+    plt.show()
 
 
 if __name__ == "__main__":
-    # Environment checking
-    # check_RandomWalk_nodes()
-
     # The true value of the random policy for RW is provided as follows
     true_value = np.arange(0, 1.1, 1 / 6)[1:-1]
+    num_runs = 100
     num_episodes = 150
+
     # Example a: value function approximation
-    # estimate_value(num_episodes=num_episodes, true_value=true_value)
+    estimate_value(num_episodes=num_episodes, true_value=true_value)
 
     # Example b: RMS error over different setups
-    alpha_list = [0.05, 0.1, 0.15]
-    parameter_sweep_td(alpha_list, num_episodes, true_value)
-    alpha_list = [0.01, 0.02, 0.03, 0.04]
-    parameter_sweep_mc(alpha_list, num_episodes, true_value)
-    plt.show()
+    algorithm_comparison(num_episodes, num_runs, true_value)
