@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.sparse import rand
+
+########################################################################
+###            Setting up the Random Walk environment                ###
+########################################################################
 
 
 # Using node to represent the states and the connection between each pair
@@ -48,6 +51,7 @@ class RandomWalk:
         terminated = False if self.state else True
         return next_state, reward, terminated
 
+    # reset the state to the initial node
     def reset(self):
         self.state = self.nodes
         while self.state != self.initial_state:
@@ -69,39 +73,6 @@ class RandomWalk:
             prev = builder
             builder = next_node
         return head
-
-
-# A random policy that return each action with equal probabilities
-def random_policy() -> int:
-    return np.random.choice(2)
-
-
-# TD algorithm
-def TD_evaluation() -> list:
-    env = RandomWalk()
-    total_states = len(env.state_space) + 2  # also include terminal states in both end
-    # Initialize value
-    V = np.zeros(shape=(total_states), dtype=float)
-    V[1:-1] += 0.5  # initial values of non-terminal state to 0.5
-    alpha = 0.1
-    gamma = 1.0
-    num_epochs = 100
-
-    V_history = [np.copy(V)]
-
-    # Run TD algorithm
-    for episode in range(num_epochs):
-        env.reset()
-        state = env.initial_idx
-        terminated = False
-        while not terminated:
-            action = random_policy()
-            next_state, reward, terminated = env.step(action)
-            V[state] = V[state] + alpha * (reward + gamma * V[next_state] - V[state])
-            state = next_state
-        if episode + 1 in [1, 10, 100]:
-            V_history.append(np.copy(V))
-    return V_history
 
 
 # Check the nodes and rewards
@@ -150,8 +121,65 @@ def check_RandomWalk_nodes():
             env.state, "\t", next_state, "reward: ", reward, "terminated:", terminated
         )
 
+    print("\n=======Test Finished!=======\n")
+
+
+########################################################################
+###                     TD and MC algorithms                         ###
+########################################################################
+
+
+# A random policy that return each action with equal probabilities
+def random_policy() -> int:
+    return np.random.choice(2)
+
+
+# TD algorithm
+def TD_evaluation(alpha: float = 0.1, num_episodes=100) -> np.ndarray:
+    env = RandomWalk()
+    total_states = len(env.state_space) + 2  # also include terminal states in both end
+    # Initialize value
+    V = np.zeros(shape=(total_states), dtype=float)
+    V[1:-1] += 0.5  # initial values of non-terminal state to 0.5
+    gamma = 1.0
+
+    V_history = np.zeros(shape=(num_episodes, total_states))
+
+    # Run TD algorithm
+    for episode in range(num_episodes):
+        env.reset()
+        state = env.initial_idx
+        terminated = False
+        while not terminated:
+            action = random_policy()
+            next_state, reward, terminated = env.step(action)
+            V[state] = V[state] + alpha * (reward + gamma * V[next_state] - V[state])
+            state = next_state
+        V_history[episode] = np.copy(V)
+    return V_history
+
 
 if __name__ == "__main__":
-    # check_RandomWalk_nodes()
-    V_history = TD_evaluation()
-    print(V_history)
+    # Environment checking
+    check_RandomWalk_nodes()
+
+    # The true value of the random policy for RW is provided as follows
+    true_value = np.arange(0, 1.1, 1 / 6)[1:-1]
+
+    # Example a: value function approximation
+    num_episodes = 100
+    V_hist_single = TD_evaluation()
+
+    # Example b: RMS error over different setups
+    num_runs = 100
+    V_hist = np.zeros(shape=(num_runs, num_episodes, 5))
+    for i in range(num_runs):
+        v_single = TD_evaluation(alpha=0.05)
+        V_hist[i] = v_single[:, 1:-1]
+
+    true_value = true_value.reshape(1, 1, -1)
+    se = (V_hist - true_value) ** 2
+    rms = np.sqrt(se.mean(axis=-1))
+    rms = rms.mean(axis=0)
+    plt.plot(rms)
+    plt.show()
