@@ -69,6 +69,13 @@ Monte Carlo methods can be used to learn optimal behavior directly from interact
     <img src='./chapter_05_monte_carlo_methods/plots/exercise_5_12/track_b_paths.png' width=80%>
 </div>
 
-### **Chapter 6: Temporal-Difference Learning**
+### **Chapter 6: Temporal-Difference Learning** &nbsp; &nbsp; :link: [link](/chapter_06_temporal_difference_learning/)
 
 *In progress*
+
+- Comparison between TD(0) and MC on Random Walk environment
+
+<p align="center">
+    <img src='./chapter_06_temporal_difference_learning/plots/example_6_2/value_approx.png', width=37.5%>
+    <img src='./chapter_06_temporal_difference_learning/plots/example_6_2/rms_compare.png', width=56.3%>
+</p>
