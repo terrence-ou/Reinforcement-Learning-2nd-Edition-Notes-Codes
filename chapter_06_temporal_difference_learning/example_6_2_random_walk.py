@@ -155,6 +155,7 @@ def parameter_sweep_mc(
     return error_hist
 
 
+# Run both algorithms and plot out the errors
 def algorithm_comparison(
     num_episodes: int, num_runs: int, true_value: np.ndarray
 ) -> None:
