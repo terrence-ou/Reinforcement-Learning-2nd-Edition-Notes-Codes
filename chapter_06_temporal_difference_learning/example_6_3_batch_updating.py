@@ -109,20 +109,48 @@ def evaluation(num_episodes: int, alpha: float, mode: str) -> np.ndarray:
 
 # run the example
 def run_bacth_update(num_episodes: int, num_runs: int, alpha: float) -> None:
+    plt.figure(figsize=(9, 6), dpi=150)
+    colors = ["tomato", "steelblue", "orchid"]
+
     true_value = np.arange(0, 1.1, 1 / 6)[1:-1]
-    for mode in ["TD", "MC"]:
+
+    # run evaluation on both algorithms
+    for j, mode in enumerate(["TD", "MC"]):
         V_hist = np.zeros(shape=(num_runs, num_episodes, 5))
         for i in range(num_runs):
             error_hist = evaluation(num_episodes, alpha, mode=mode)
             V_hist[i] = error_hist[:, 1:-1]
         avg_error = rms(V_hist, true_value)
-        plt.plot(avg_error, label=mode)
-    plt.legend()
+        plt.plot(
+            avg_error,
+            label="constant-$\\alpha$ Monte Carlo"
+            if mode == "MC"
+            else "Temporal-Difference (0)",
+            c=colors[j],
+        )
+
+    # codes for plotting
+    font_dict = {"fontsize": 11}
+    plt.grid(c="lightgray")
+    plt.margins(0.02)
+    for i, spine in enumerate(plt.gca().spines.values()):
+        if i in [0, 2]:
+            spine.set_linewidth(1.5)
+            continue
+        spine.set_visible(False)
+
+    plt.xlabel("Walks/Episodes", fontdict=font_dict)
+    plt.ylabel("RMS error, averaged over states", fontdict=font_dict)
+    plt.title(
+        "Batch Training result, averaged over 100 runs", fontsize=13, fontweight="bold"
+    )
+    plt.legend(loc=7)
+    plt.savefig("./plots/example_6_3.png")
     plt.show()
 
 
 if __name__ == "__main__":
     num_episodes = 100
-    num_runs = 1
+    num_runs = 100
     alpha = 1e-3
     run_bacth_update(num_episodes, num_runs, alpha)
