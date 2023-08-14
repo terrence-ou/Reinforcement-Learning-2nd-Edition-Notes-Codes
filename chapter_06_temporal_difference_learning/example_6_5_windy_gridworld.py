@@ -66,10 +66,14 @@ def run_sarsa_windy(
         env, alpha=alpha, epsilon=epsilon, total_steps=total_steps
     )
     if plot:
-        plt.plot(step_episode_hist[:8000])
+        plt_setup(xlabel="Steps/Walks", ylabel="Episodes")
+        plt.plot(step_episode_hist[:8000], linewidth=1.2, c="tomato")
+        plt.savefig("./plots/example_6_5/step_episodes.png")
         plt.show()
+        plt_setup(xlabel="Episodes", ylabel="Rewards")
         plt.ylim((-300, 0))
-        plt.plot(reward_hist[: step_episode_hist[8000]])
+        plt.plot(reward_hist[: step_episode_hist[8000]], linewidth=1.2, c="orchid")
+        plt.savefig("./plots/example_6_5/rewards.png")
         plt.show()
 
     if render_result:
@@ -82,6 +86,23 @@ def run_sarsa_windy(
             state = next_state
             if terminated or truncated:
                 break
+
+
+def plt_setup(xlabel: str, ylabel: str, title: str = None):
+    # codes for plotting
+    font_dict = {"fontsize": 11, "fontweight": "bold"}
+    plt.figure(figsize=(6, 6), dpi=150)
+    plt.grid(c="lightgray")
+    plt.margins(0.02)
+    for i, spine in enumerate(plt.gca().spines.values()):
+        if i in [0, 2]:
+            spine.set_linewidth(1.5)
+            continue
+        spine.set_visible(False)
+    plt.xlabel(xlabel, fontdict=font_dict)
+    plt.ylabel(ylabel, fontdict=font_dict)
+    if title:
+        plt.title(title, fontsize=13, fontweight="bold")
 
 
 if __name__ == "__main__":
