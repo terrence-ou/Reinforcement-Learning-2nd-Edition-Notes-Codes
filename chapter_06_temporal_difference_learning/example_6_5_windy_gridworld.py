@@ -66,13 +66,13 @@ def run_sarsa_windy(
         env, alpha=alpha, epsilon=epsilon, total_steps=total_steps
     )
     if plot:
-        plt_setup(xlabel="Steps/Walks", ylabel="Episodes")
+        plt_setup(xlabel="Steps/Walks", ylabel="Episodes", title="Step-Episode history")
         plt.plot(step_episode_hist[:8000], linewidth=1.2, c="tomato")
         plt.savefig("./plots/example_6_5/step_episodes.png")
         plt.show()
-        plt_setup(xlabel="Episodes", ylabel="Rewards")
+        plt_setup(xlabel="Episodes", ylabel="Rewards", title="Reward history")
         plt.ylim((-300, 0))
-        plt.plot(reward_hist[: step_episode_hist[8000]], linewidth=1.2, c="orchid")
+        plt.plot(reward_hist[: step_episode_hist[8000]], linewidth=1.2, c="steelblue")
         plt.savefig("./plots/example_6_5/rewards.png")
         plt.show()
 
@@ -90,7 +90,7 @@ def run_sarsa_windy(
 
 def plt_setup(xlabel: str, ylabel: str, title: str = None):
     # codes for plotting
-    font_dict = {"fontsize": 11, "fontweight": "bold"}
+    font_dict = {"fontsize": 11}
     plt.figure(figsize=(6, 6), dpi=150)
     plt.grid(c="lightgray")
     plt.margins(0.02)

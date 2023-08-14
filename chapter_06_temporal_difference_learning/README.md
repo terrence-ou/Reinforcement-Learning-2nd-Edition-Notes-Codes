@@ -21,3 +21,10 @@ Batch-updating versions of TD(0) and constant- $\alpha$ MC were applied as follo
 <p align="center">
     <img src='./plots/example_6_3.png', width=75%>
 </p>
+
+### 6.5 Windy Gridworld
+
+<p align="center">
+    <img src='./plots/example_6_5/step_episodes.png', width=45%>
+    <img src='./plots/example_6_5/rewards.png', width=45%>
+</p>
