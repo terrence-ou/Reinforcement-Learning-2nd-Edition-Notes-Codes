@@ -1,12 +1,13 @@
 import numpy as np
 from gymnasium import Env
+from pandas.core import window
 import pygame
 
 
-class WindyGridworld:
-    metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 6}
+class WindyGridworld(Env):
+    metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 10}
 
-    def __init__(self, king_move: bool = False, size: int = 2):
+    def __init__(self, king_move: bool = False, render_mode: str = None, size: int = 2):
         # Initialize gridworld map with cell-wise reward
         self.cols = 10
         self.rows = 7
@@ -33,10 +34,9 @@ class WindyGridworld:
             3: (0, -1),  # LEFT
         }
 
-        # Initialize the initial state
-        self.reset()
-
         # Initialize parameters for pygame
+        self.size = size
+        self.render_mode = render_mode
         self.window_size = (self.map.shape[1] * size, self.map.shape[0] * size)
         self.window = None  # window for pygame rendering
         self.clock = None  # clock for pygame ticks
@@ -63,20 +63,85 @@ class WindyGridworld:
 
         self.state = next_state
         reward = self.map[next_state]
+
+        if self.render_mode == "human":
+            self.render(self.render_mode)
+
         return next_state, reward, terminated
 
     # Resent environment to the initial state
     def reset(self):
         self.state = (3, 0)
+        if self.render_mode == "human":
+            self.render(self.render_mode)
         return self.state
 
-    def render(self):
-        raise NotImplementedError
+    def render(self, mode):
+        if self.window is None:
+            pygame.init()
+            pygame.display.set_caption("Windy Gridworld")
+            if mode == "human":
+                self.window = pygame.display.set_mode(self.window_size)
+
+        if self.clock is None:
+            self.clock = pygame.time.Clock()
+
+        size = self.size
+        self.window.fill((255, 255, 255))
+        # Draw the map
+        for row in range(self.rows):
+            for col in range(self.cols):
+                fill = (120, 120, 120)
+                if (row, col) == self.start:
+                    fill = (235, 52, 52)
+                    pygame.draw.rect(
+                        surface=self.window,
+                        color=fill,
+                        rect=(col * size, row * size, size, size),
+                        width=0,
+                    )
+                if (row, col) == self.goal:
+                    fill = (61, 227, 144)
+                    pygame.draw.rect(
+                        surface=self.window,
+                        color=fill,
+                        rect=(col * size, row * size, size, size),
+                        width=0,
+                    )
+
+                pygame.draw.rect(
+                    surface=self.window,
+                    color=fill,
+                    rect=(col * size, row * size, size, size),
+                    width=1,
+                )
+        # draw the agent
+        pygame.draw.rect(
+            surface=self.window,
+            color=(86, 61, 227),
+            rect=(self.state[1] * size, self.state[0] * size, size, size),
+            width=0,
+        )
+
+        if mode == "human":
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.window = None
+                    pygame.quit()
+                    self.truncated = True
+            self.clock.tick(self.metadata["render_fps"])
 
 
 if __name__ == "__main__":
-    test = WindyGridworld()
-    test.state = (3, 5)
-    print(test.step(2))
-    print(test.step(2))
-    print(test.step(2))
+    render_mode = None
+    env = WindyGridworld(render_mode=render_mode, size=40)
+    env.reset()
+    ttl_reward = 0
+    while True:
+        action = np.random.choice(env.nA)
+        next_state, reward, terminated = env.step(action)
+        ttl_reward += reward
+        if terminated:
+            break
+    print(ttl_reward)
