@@ -1,10 +1,12 @@
 import numpy as np
-import gymnasium as gym
+from gymnasium import Env
 import pygame
 
 
 class WindyGridworld:
-    def __init__(self, king_move=False):
+    metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 6}
+
+    def __init__(self, king_move: bool = False, size: int = 2):
         # Initialize gridworld map with cell-wise reward
         self.cols = 10
         self.rows = 7
@@ -12,15 +14,18 @@ class WindyGridworld:
         self.start = (3, 0)
         self.goal = (3, 7)
 
-        self.map = np.ones(shape=(self.rows, self.cols)) * -1
+        self.map = np.ones(shape=(self.rows, self.cols), dtype=int) * -1
         self.map[self.goal] = 0
 
-        self.wind = np.zeros(shape=(self.cols,))
+        # define wind factors
+        self.wind = np.zeros(shape=(self.cols,), dtype=int)
         self.wind[3:9] = 1
         self.wind[6:8] = 2
 
         # initialize action space
-        self.action_space = 4 if not king_move else 9
+        self.nA = 4 if not king_move else 8
+        self.nS = self.map.shape
+
         self.act_move_map = {
             0: (-1, 0),  # UP
             1: (1, 0),  # DOWN
@@ -31,25 +36,34 @@ class WindyGridworld:
         # Initialize the initial state
         self.reset()
 
-    # Take an action and return a tuple of (R, S')
+        # Initialize parameters for pygame
+        self.window_size = (self.map.shape[1] * size, self.map.shape[0] * size)
+        self.window = None  # window for pygame rendering
+        self.clock = None  # clock for pygame ticks
+
+    # Take an action and return a tuple of (S', R, Terminated)
     def step(self, action):
+        terminated = False
         move = self.act_move_map[action]
-        next_row = self.state[0] + move[0]
         # Adding wind factor to the vertical move
-        next_col = self.state[1] + move[1] - self.wind[self.state[1]]
-        if (
-            next_row < 0
-            or next_row > self.cols - 1
-            or next_col < 0
-            or next_col > self.cols - 1
-        ):
-            next_state = self.state
-        else:
-            next_state = (next_row, next_col)
+        next_row = self.state[0] + move[0] - self.wind[self.state[1]]
+        # check the row's bounds
+        next_row = max(0, next_row)
+        next_row = min(self.rows - 1, next_row)
+
+        next_col = self.state[1] + move[1]
+        # check the column's bounds
+        next_col = max(0, next_col)
+        next_col = min(self.cols - 1, next_col)
+
+        next_state = (next_row, next_col)
+
+        if next_state == self.goal:
+            terminated = True
 
         self.state = next_state
         reward = self.map[next_state]
-        return reward, next_state
+        return next_state, reward, terminated
 
     # Resent environment to the initial state
     def reset(self):
@@ -62,5 +76,7 @@ class WindyGridworld:
 
 if __name__ == "__main__":
     test = WindyGridworld()
-    print(test.map)
-    print(test.wind)
+    test.state = (3, 5)
+    print(test.step(2))
+    print(test.step(2))
+    print(test.step(2))
