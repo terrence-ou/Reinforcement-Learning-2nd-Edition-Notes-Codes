@@ -23,7 +23,7 @@ def SARSA(env: Any, alpha: float, epsilon: float, total_steps: int = 8000) -> tu
 
     curr_step = 0
     total_episodes = 0
-    step_episode_hist = np.zeros(shape=(total_steps + 1,))
+    step_episode_hist = np.zeros(shape=(total_steps + 1,), dtype=int)
     reward_hist = []
 
     # Run SARSA for given steps
@@ -53,17 +53,23 @@ def SARSA(env: Any, alpha: float, epsilon: float, total_steps: int = 8000) -> tu
     return Q, step_episode_hist, reward_hist
 
 
+# The wrapper function for windy gridworld example
 def run_sarsa_windy(
-    epsilon: float, alpha: float, plot: bool = True, render_result: bool = False
+    epsilon: float,
+    alpha: float,
+    total_steps: int,
+    plot: bool = True,
+    render_result: bool = False,
 ) -> None:
-    render_mode = None
-    env = WindyGridworld(render_mode=render_mode)
-    Q, step_episode_hist, reward_hist = SARSA(env, alpha=alpha, epsilon=epsilon)
+    env = WindyGridworld()
+    Q, step_episode_hist, reward_hist = SARSA(
+        env, alpha=alpha, epsilon=epsilon, total_steps=total_steps
+    )
     if plot:
-        plt.plot(step_episode_hist)
+        plt.plot(step_episode_hist[:8000])
         plt.show()
         plt.ylim((-300, 0))
-        plt.plot(reward_hist)
+        plt.plot(reward_hist[: step_episode_hist[8000]])
         plt.show()
 
     if render_result:
@@ -81,4 +87,11 @@ def run_sarsa_windy(
 if __name__ == "__main__":
     epsilon = 0.1
     alpha = 0.5
-    run_sarsa_windy(epsilon=epsilon, alpha=alpha, plot=False, render_result=True)
+    total_steps = 20_000
+    run_sarsa_windy(
+        epsilon=epsilon,
+        alpha=alpha,
+        total_steps=total_steps,
+        plot=True,
+        render_result=False,
+    )
