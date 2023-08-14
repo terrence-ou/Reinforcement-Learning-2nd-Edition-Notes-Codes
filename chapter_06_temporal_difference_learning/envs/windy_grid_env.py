@@ -1,13 +1,14 @@
 import numpy as np
 from gymnasium import Env
-from pandas.core import window
 import pygame
 
 
 class WindyGridworld(Env):
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 10}
 
-    def __init__(self, king_move: bool = False, render_mode: str = None, size: int = 2):
+    def __init__(
+        self, king_move: bool = False, render_mode: str = None, size: int = 40
+    ):
         # Initialize gridworld map with cell-wise reward
         self.cols = 10
         self.rows = 7
@@ -26,6 +27,7 @@ class WindyGridworld(Env):
         # initialize action space
         self.nA = 4 if not king_move else 8
         self.nS = self.map.shape
+        self.truncated = False
 
         self.act_move_map = {
             0: (-1, 0),  # UP
@@ -67,11 +69,12 @@ class WindyGridworld(Env):
         if self.render_mode == "human":
             self.render(self.render_mode)
 
-        return next_state, reward, terminated
+        return next_state, reward, terminated, self.truncated
 
     # Resent environment to the initial state
     def reset(self):
         self.state = (3, 0)
+        self.truncated = False
         if self.render_mode == "human":
             self.render(self.render_mode)
         return self.state
