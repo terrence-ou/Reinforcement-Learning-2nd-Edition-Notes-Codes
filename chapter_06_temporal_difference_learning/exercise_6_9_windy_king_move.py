@@ -108,13 +108,13 @@ def plt_setup(xlabel: str, ylabel: str, title: str = None):
 
 
 if __name__ == "__main__":
-    epsilon = 0.2
+    epsilon = 0.1
     alpha = 0.5
     total_steps = 20_000
     run_sarsa_windy(
         epsilon=epsilon,
         alpha=alpha,
         total_steps=total_steps,
-        plot=False,
-        render_result=True,
+        plot=True,
+        render_result=False,
     )
