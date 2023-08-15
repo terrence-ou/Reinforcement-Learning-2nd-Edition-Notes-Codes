@@ -81,6 +81,7 @@ def run_sarsa_windy(
         A = Q.argmax(axis=-1)
         env = WindyGridworld(render_mode="human", king_move=True)
         state = env.reset()
+
         while True:
             action = A[state]
             next_state, reward, terminated, truncated = env.step(action)
