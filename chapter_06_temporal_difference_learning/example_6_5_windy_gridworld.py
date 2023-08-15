@@ -13,11 +13,9 @@ def epsilon_greedy(Q: np.ndarray, state: tuple, epsilon: float = 0.1) -> int:
 
 # SARSA Algorithm
 def SARSA(env: Any, alpha: float, epsilon: float, total_steps: int = 8000) -> tuple:
-    optim_init = 0
     gamma = 1.0
 
     # Initialize Q values
-    # Q = np.random.normal(loc=optim_init, scale=1.0, size=(*env.nS, env.nA))
     Q = np.zeros(shape=(*env.nS, env.nA))
     Q[env.goal] = 0  # Set the value of the terminal state to 0
 
@@ -65,6 +63,8 @@ def run_sarsa_windy(
     Q, step_episode_hist, reward_hist = SARSA(
         env, alpha=alpha, epsilon=epsilon, total_steps=total_steps
     )
+
+    # plot the result
     if plot:
         plt_setup(xlabel="Steps/Walks", ylabel="Episodes", title="Step-Episode history")
         plt.plot(step_episode_hist[:8000], linewidth=1.2, c="tomato")
@@ -76,6 +76,7 @@ def run_sarsa_windy(
         plt.savefig("./plots/example_6_5/rewards.png")
         plt.show()
 
+    # render out the animation of the learned optimal path
     if render_result:
         A = Q.argmax(axis=-1)
         env = WindyGridworld(render_mode="human")
@@ -88,6 +89,7 @@ def run_sarsa_windy(
                 break
 
 
+# Setup plot visualization basis
 def plt_setup(xlabel: str, ylabel: str, title: str = None):
     # codes for plotting
     font_dict = {"fontsize": 11}
@@ -106,7 +108,7 @@ def plt_setup(xlabel: str, ylabel: str, title: str = None):
 
 
 if __name__ == "__main__":
-    epsilon = 0.1
+    epsilon = 0.2
     alpha = 0.5
     total_steps = 20_000
     run_sarsa_windy(
