@@ -7,7 +7,11 @@ class WindyGridworld(Env):
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 10}
 
     def __init__(
-        self, king_move: bool = False, render_mode: str = None, size: int = 40
+        self,
+        king_move: bool = False,  # For exercise 6.9
+        stochastic_wind: bool = False,  # For exercise 6.10
+        render_mode: str = None,
+        size: int = 40,
     ):
         # Initialize gridworld map with cell-wise reward
         self.cols = 10
@@ -18,6 +22,7 @@ class WindyGridworld(Env):
 
         self.map = np.ones(shape=(self.rows, self.cols), dtype=int) * -1
         self.map[self.goal] = 0
+        self.stochastic = stochastic_wind
 
         # define wind factors
         self.wind = np.zeros(shape=(self.cols,), dtype=int)
@@ -54,6 +59,15 @@ class WindyGridworld(Env):
         move = self.act_move_map[action]
         # Adding wind factor to the vertical move
         next_row = self.state[0] + move[0] - self.wind[self.state[1]]
+
+        # Exercise 3.10, stochastic wind problem
+        if self.stochastic and self.wind[self.state[1]]:
+            prob = np.random.random(size=(1,))
+            if prob <= 1 / 3:
+                next_row -= 1
+            elif prob <= 2 / 3:
+                next_row += 1
+
         # check the row's bounds
         next_row = max(0, next_row)
         next_row = min(self.rows - 1, next_row)
