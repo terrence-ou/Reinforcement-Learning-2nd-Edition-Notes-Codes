@@ -24,7 +24,7 @@ Batch-updating versions of TD(0) and constant- $\alpha$ MC were applied as follo
 
 ### 6.5 Windy Gridworld (*p.130*)
 
-A standard gridworld with start goal states, and a crosswind running upward through the middle of the grid. The actions are the standard four — *up, down, right, and left* — in the middle region the resultant next states are shifted upward by a “wind,” the strength of which varies from column to column. [Code](/example_6_5_windy_gridworld.py)
+A standard gridworld with start goal states, and a crosswind running upward through the middle of the grid. The actions are the standard four — *up, down, right, and left* — in the middle region the resultant next states are shifted upward by a “wind,” the strength of which varies from column to column. [Code](https://github.com/terrence-ou/Reinforcement-Learning-2nd-Edition-Notes-Codes/blob/main/chapter_06_temporal_difference_learning/example_6_5_windy_gridworld.py)
 
 - Train records:
 <p align="center">
@@ -36,4 +36,40 @@ A standard gridworld with start goal states, and a crosswind running upward thro
 
 <p align="center">
     <img src='./plots/example_6_5/result.gif', width=60%>
+</p>
+
+
+## Exercise
+
+### 6.9 Windy Gridworld with King's Move (*p.131*)
+
+Re-solve the windy gridworld assuming eight possible actions, including the diagonal moves, rather than four. Can also include the ninth action that causes no movement at all other than that caused by wind. [Code](https://github.com/terrence-ou/Reinforcement-Learning-2nd-Edition-Notes-Codes/blob/main/chapter_06_temporal_difference_learning/exercise_6_9_windy_king_move.py)
+
+- Train records:
+<p align="center">
+    <img src='./plots/exercise_6_9/step_episodes.png', width=45%>
+    <img src='./plots/exercise_6_9/rewards.png', width=45%>
+</p>
+
+- Result:
+
+<p align="center">
+    <img src='./plots/exercise_6_9/result.gif', width=60%>
+</p>
+
+
+### 6.10 Windy Gridworld with Stochastic Wind (*p.131*)
+
+Re-solve the windy gridworld with King's move, assuming that the effect of the wind, if there's any, is stochastic, sometimes varying by 1 from the mean values given for each column. [Code](https://github.com/terrence-ou/Reinforcement-Learning-2nd-Edition-Notes-Codes/blob/main/chapter_06_temporal_difference_learning/exercise_6_10_stochastic_wind.py)
+
+- Train records:
+<p align="center">
+    <img src='./plots/exercise_6_10/step_episodes.png', width=45%>
+    <img src='./plots/exercise_6_10/rewards.png', width=45%>
+</p>
+
+- Result:
+
+<p align="center">
+    <img src='./plots/exercise_6_10/result.gif', width=60%>
 </p>
