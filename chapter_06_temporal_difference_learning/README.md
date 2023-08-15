@@ -22,9 +22,18 @@ Batch-updating versions of TD(0) and constant- $\alpha$ MC were applied as follo
     <img src='./plots/example_6_3.png', width=75%>
 </p>
 
-### 6.5 Windy Gridworld
+### 6.5 Windy Gridworld (*p.130*)
 
+A standard gridworld with start goal states, and a crosswind running upward through the middle of the grid. The actions are the standard four — *up, down, right, and left* — in the middle region the resultant next states are shifted upward by a “wind,” the strength of which varies from column to column. [Code](/example_6_5_windy_gridworld.py)
+
+- Train records:
 <p align="center">
     <img src='./plots/example_6_5/step_episodes.png', width=45%>
     <img src='./plots/example_6_5/rewards.png', width=45%>
+</p>
+
+- Result:
+
+<p align="center">
+    <img src='./plots/example_6_5/result.gif', width=60%>
 </p>
