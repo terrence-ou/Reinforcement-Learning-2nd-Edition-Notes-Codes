@@ -25,7 +25,7 @@ class WindyGridworld(Env):
         self.wind[6:8] = 2
 
         # initialize action space
-        self.nA = 4 if not king_move else 8
+        self.nA = 4 if not king_move else 9
         self.nS = self.map.shape
         self.truncated = False
 
@@ -34,6 +34,11 @@ class WindyGridworld(Env):
             1: (1, 0),  # DOWN
             2: (0, 1),  # RIGHT
             3: (0, -1),  # LEFT
+            4: (-1, -1),  # UP LEFT
+            5: (-1, 1),  # UP RIGHT
+            6: (1, -1),  # DOWN LEFT
+            7: (1, 1),  # DOWN RIGHT
+            8: (0, 0),  # NO MOVE
         }
 
         # Initialize parameters for pygame
