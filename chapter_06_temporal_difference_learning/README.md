@@ -59,6 +59,7 @@ into this region incurs a reward of −100 and sends the agent instantly back to
 <p align="center">
     <img src='./plots/example_6_6/Q_learning.gif', width=60%>
 </p>
+
 ## Exercise
 
 ### 6.9 Windy Gridworld with King's Move (*p.131*)
