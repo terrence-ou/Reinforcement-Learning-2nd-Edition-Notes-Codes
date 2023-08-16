@@ -60,6 +60,14 @@ into this region incurs a reward of −100 and sends the agent instantly back to
     <img src='./plots/example_6_6/Q_learning.gif', width=60%>
 </p>
 
+### Figure 6.3 Performance of TD methods on Cliff Walking
+
+Interim and asymptonic performance of TD control methods on the cliff-walking task as a function of $\alpha$. All algorithms used an $\varepsilon$-greedy policy with $\varepsilon = 0.1$. Asymptotic performance is an average over 100,000 episodes whereas interim performance is an average over the first 100 episodes. [Code](https://github.com/terrence-ou/Reinforcement-Learning-2nd-Edition-Notes-Codes/blob/main/chapter_06_temporal_difference_learning/figure_6_3_TD_methods_performance.py)
+
+<p align="center">
+    <img src='./plots/figure_6_3.png', width=75%>
+</p>
+
 ## Exercise
 
 ### 6.9 Windy Gridworld with King's Move (*p.131*)
