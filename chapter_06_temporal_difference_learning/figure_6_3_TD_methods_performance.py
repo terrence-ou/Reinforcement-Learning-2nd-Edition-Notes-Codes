@@ -155,11 +155,58 @@ def run_comparison(
         )
 
 
+# Plot all results
+def plot_results(results: dict) -> None:
+    font_dict = {"fontsize": 11}
+    plt.figure(figsize=(9, 6), dpi=150)
+    plt.grid(c="lightgray")
+    plt.margins(0.02)
+    for i, spine in enumerate(plt.gca().spines.values()):
+        if i in [0, 2]:
+            spine.set_linewidth(1.5)
+            continue
+        spine.set_visible(False)
+    plt.xlabel("$\\alpha$", fontdict={"fontsize": 14, "fontweight": "bold"})
+    plt.xticks(np.arange(10), np.arange(1, 11, 1, dtype=float) / 10)
+    plt.ylabel("Sum of rewards per episode", fontdict=font_dict)
+    plt.title(
+        "Interim and Asymptotic Performance of TD Methods",
+        fontsize=13,
+        fontweight="bold",
+    )
+
+    line_type = {"Asymptotic": "-", "Interim": "-."}
+    colors = {
+        "expected_SARSA": "orchid",
+        "Q_learning": "steelblue",
+        "SARSA": "mediumseagreen",
+    }
+
+    markers = {
+        "expected_SARSA": ".",
+        "Q_learning": "*",
+        "SARSA": "x",
+    }
+
+    for key, value in results.items():
+        perform, algo = key.split()
+        style = line_type[perform]
+        color = colors[algo]
+        marker = markers[algo]
+        plt.plot(
+            value, linestyle=style, c=color, marker=marker, linewidth=1.2, label=key
+        )
+    plt.ylim(-150, 0)
+    plt.legend()
+    plt.savefig("./plots/figure_6_3.png")
+    plt.show()
+
+
 if __name__ == "__main__":
-    num_episodes = [100_000, 100]
-    num_runs = [10, 50_000]
+    num_episodes = [10_000, 100]
+    num_runs = [5, 1000]
     prefixs = ["Asymptotic ", "Interim "]
-    train = True
+    train = False
     results = defaultdict(list)
 
     if train:
@@ -174,8 +221,4 @@ if __name__ == "__main__":
         with open("./history/figure_6_3/results.pkl", "rb") as f:
             results = pickle.load(f)
 
-        for key, value in results.items():
-            plt.plot(value, label=key)
-        plt.ylim(-150, 0)
-        plt.legend()
-        plt.show()
+        plot_results(results)
