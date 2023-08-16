@@ -38,7 +38,27 @@ A standard gridworld with start goal states, and a crosswind running upward thro
     <img src='./plots/example_6_5/result.gif', width=60%>
 </p>
 
+### 6.6 Cliff Walking
+This gridworld example compares Sarsa and Q-learning, highlighting the difference between on-policy (Sarsa) and off-policy (Q-learning) methods. This is a standard undiscounted, episodic task, with start and goal states, and the usual actions
+causing movement up, down, right, and left. Reward is −1 on all transitions except those into the region marked “The Cliff.” Stepping
+into this region incurs a reward of −100 and sends the agent instantly back to the start. [Code](https://github.com/terrence-ou/Reinforcement-Learning-2nd-Edition-Notes-Codes/blob/main/chapter_06_temporal_difference_learning/example_6_6_clif_walking.py)
 
+- The reward record of Q-learning and SARSA:
+<p align="center">
+    <img src='./plots/example_6_6/rewards.png', width=75%>
+</p>
+
+- Result: **SARSA**
+
+<p align="center">
+    <img src='./plots/example_6_6/SARSA.gif', width=60%>
+</p>
+
+- Result: **Q-learning**
+
+<p align="center">
+    <img src='./plots/example_6_6/Q_learning.gif', width=60%>
+</p>
 ## Exercise
 
 ### 6.9 Windy Gridworld with King's Move (*p.131*)
