@@ -1,5 +1,6 @@
 from typing import Any
 from collections import defaultdict
+import pickle
 from tqdm import tqdm
 
 import numpy as np
@@ -139,7 +140,9 @@ def run_algorithm(
 
 
 # Run all algorithms
-def run_comparison(num_episodes: int, num_runs: int, results: dict) -> None:
+def run_comparison(
+    num_episodes: int, num_runs: int, prefix: str, results: dict
+) -> None:
     algorithms = [expected_SARSA, Q_learning, SARSA]
     keys = ["expected_SARSA", "Q_learning", "SARSA"]
     for i, algorithm in enumerate(algorithms):
@@ -148,19 +151,31 @@ def run_comparison(num_episodes: int, num_runs: int, results: dict) -> None:
             num_runs=num_runs,
             num_episodes=num_episodes,
             results=results,
-            algo_key=keys[i],
+            algo_key=prefix + keys[i],
         )
 
 
 if __name__ == "__main__":
-    num_episodes = 1000
-    num_runs = 2
+    num_episodes = [100_000, 100]
+    num_runs = [10, 50_000]
+    prefixs = ["Asymptotic ", "Interim "]
+    train = True
     results = defaultdict(list)
 
-    run_comparison(num_episodes, num_runs, results)
+    if train:
+        for i in range(len(num_episodes)):
+            episodes = num_episodes[i]
+            runs = num_runs[i]
+            prefix = prefixs[i]
+            run_comparison(episodes, runs, prefix, results)
+            with open("./history/figure_6_3/results.pkl", "wb") as f:
+                pickle.dump(results, f)
+    else:
+        with open("./history/figure_6_3/results.pkl", "rb") as f:
+            results = pickle.load(f)
 
-    for key, value in results.items():
-        plt.plot(value, label=key)
-    plt.ylim(-150, 0)
-    plt.legend()
-    plt.show()
+        for key, value in results.items():
+            plt.plot(value, label=key)
+        plt.ylim(-150, 0)
+        plt.legend()
+        plt.show()
