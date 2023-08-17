@@ -4,15 +4,16 @@ import numpy as np
 # Environment for example 6.7
 class Two_State_MDP:
     def __init__(self):
-        self.nS = [(1,), (20,), (2,), (1,)]
-        self.nA = [1, 20, 2, 1]
-        self.rewards = np.random.normal(loc=-0.1, scale=1.0, size=(20,))
+        num_samples = 10
+        self.nS = [(num_samples,), (2,), (1,)]
+        self.nA = [num_samples, 2, 1]
+        self.start_state = 1
         self.reset()
 
     def step(self, action):
         assert 0 <= action < self.nA[self.state], "Wrong action"
         terminated = False
-        if self.state == 2:
+        if self.state == self.start_state:
             if action == 0:
                 self.state -= 1
                 reward = 0
@@ -21,13 +22,13 @@ class Two_State_MDP:
                 reward = 0
                 terminated = True
         else:
-            reward = self.rewards[action]
-            self.state -= 1
+            reward = np.random.normal(-0.1, 1.0)
+            self.state = 2
             terminated = True
         return self.state, reward, terminated
 
     def reset(self):
-        self.state = 2
+        self.state = 1
         return self.state
 
 
