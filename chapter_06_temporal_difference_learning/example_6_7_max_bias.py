@@ -100,7 +100,7 @@ def plot_result(left_actions_q, left_actions_dq):
     plt.yticks([0.05, 0.25, 0.5, 0.75, 1.0], ["5%", "25%", "50%", "75%", "100%"])
     plt.ylim(0.0, 1.0)
     plt.title(
-        "Comparison between Q-learning and Double Q-learning",
+        "Comparison of Q-learning and Double Q-learning",
         fontsize=13,
         fontweight="bold",
     )
