@@ -68,6 +68,17 @@ Interim and asymptonic performance of TD control methods on the cliff-walking ta
     <img src='./plots/figure_6_3.png', width=75%>
 </p>
 
+### 6.7 Comparison of Q-learning and Double Q-learning on A Simple MDP
+
+Comparison of Q-learning and Double Q-learning on a simple episodic MDP. Q-learning initially learns to take the left action much more often than the right action, and always takes it significantly more often than the 5% minimum probability enforced by
+$\varepsilon$-greedy action selection with $\varepsilon$= 0.1. In contrast, Double Q-learning is essentially unaffected by maximization bias. These data are averaged over 10,000 runs. [Code](https://github.com/terrence-ou/Reinforcement-Learning-2nd-Edition-Notes-Codes/blob/main/chapter_06_temporal_difference_learning/example_6_7_max_bias.py)
+
+
+<p align="center">
+    <img src='./plots/example_6_7.png', width=75%>
+</p>
+
+
 ## Exercise
 
 ### 6.9 Windy Gridworld with King's Move (*p.131*)
