@@ -71,11 +71,16 @@ Monte Carlo methods can be used to learn optimal behavior directly from interact
 
 ### **Chapter 6: Temporal-Difference Learning** &nbsp; &nbsp; :link: [link](/chapter_06_temporal_difference_learning/)
 
-*In progress*
+This chapter introduced temporal-difference (TD) learning, and showed how it can be applied to the reinforcement learning problem. The TD control methods are classified according to whether they deal with the complication by using and on-policy (SARSA, expected SARSA) or off-policy (Q-learning) approach. The chapter also discussed using double learning method to avoid maximization bias problem.
 
-- Comparison between TD(0) and MC on Random Walk environment
+- Comparison of TD(0) and MC on Random Walk environment
 
 <p align="center">
     <img src='./chapter_06_temporal_difference_learning/plots/example_6_2/value_approx.png', width=37.5%>
     <img src='./chapter_06_temporal_difference_learning/plots/example_6_2/rms_compare.png', width=56.3%>
 </p>
+
+- Interim and Asymptotic Performance of TD methods
+<div align='center'>
+    <img src='./chapter_06_temporal_difference_learning/plots/figure_6_3.png' width=70%>
+</div>

@@ -38,7 +38,7 @@ A standard gridworld with start goal states, and a crosswind running upward thro
     <img src='./plots/example_6_5/result.gif', width=60%>
 </p>
 
-### 6.6 Cliff Walking
+### 6.6 Cliff Walking (*p.132*)
 This gridworld example compares Sarsa and Q-learning, highlighting the difference between on-policy (Sarsa) and off-policy (Q-learning) methods. This is a standard undiscounted, episodic task, with start and goal states, and the usual actions
 causing movement up, down, right, and left. Reward is −1 on all transitions except those into the region marked “The Cliff.” Stepping
 into this region incurs a reward of −100 and sends the agent instantly back to the start. [Code](https://github.com/terrence-ou/Reinforcement-Learning-2nd-Edition-Notes-Codes/blob/main/chapter_06_temporal_difference_learning/example_6_6_clif_walking.py)
@@ -60,7 +60,7 @@ into this region incurs a reward of −100 and sends the agent instantly back to
     <img src='./plots/example_6_6/Q_learning.gif', width=60%>
 </p>
 
-### Figure 6.3 Performance of TD methods on Cliff Walking
+### Figure 6.3 Performance of TD methods on Cliff Walking (*p.133*)
 
 Interim and asymptonic performance of TD control methods on the cliff-walking task as a function of $\alpha$. All algorithms used an $\varepsilon$-greedy policy with $\varepsilon = 0.1$. Asymptotic performance is an average over 100,000 episodes whereas interim performance is an average over the first 100 episodes. [Code](https://github.com/terrence-ou/Reinforcement-Learning-2nd-Edition-Notes-Codes/blob/main/chapter_06_temporal_difference_learning/figure_6_3_TD_methods_performance.py)
 
@@ -68,7 +68,7 @@ Interim and asymptonic performance of TD control methods on the cliff-walking ta
     <img src='./plots/figure_6_3.png', width=75%>
 </p>
 
-### 6.7 Comparison of Q-learning and Double Q-learning on A Simple MDP
+### 6.7 Comparison of Q-learning and Double Q-learning on A Simple MDP (*p.135*)
 
 Comparison of Q-learning and Double Q-learning on a simple episodic MDP. Q-learning initially learns to take the left action much more often than the right action, and always takes it significantly more often than the 5% minimum probability enforced by
 $\varepsilon$-greedy action selection with $\varepsilon$= 0.1. In contrast, Double Q-learning is essentially unaffected by maximization bias. These data are averaged over 10,000 runs. [Code](https://github.com/terrence-ou/Reinforcement-Learning-2nd-Edition-Notes-Codes/blob/main/chapter_06_temporal_difference_learning/example_6_7_max_bias.py)
