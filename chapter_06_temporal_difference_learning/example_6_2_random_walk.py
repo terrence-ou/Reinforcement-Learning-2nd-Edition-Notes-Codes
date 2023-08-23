@@ -1,3 +1,4 @@
+from typing import Any
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -110,7 +111,7 @@ def estimate_value(num_episodes: int, true_value: np.ndarray) -> None:
         )
     plt.title("The values learned after $n$ sweeps", fontweight="bold", fontsize=13)
     plt.legend(loc=4)
-    plt.savefig("./plots/example_6_2/value_approx.png")
+    # plt.savefig("./plots/example_6_2/value_approx.png")
     plt.show()
 
 
@@ -123,31 +124,19 @@ def rms(V_hist: np.ndarray, true_value: np.ndarray) -> np.ndarray:
     return rooted_mse
 
 
-# Run TD evaluation for given episodes
-def parameter_sweep_td(
-    alpha_list: list, num_episodes: int, num_runs: int, true_value: np.ndarray
+# Run MC/TD evaluation for given episodes
+def parameter_sweep(
+    algorithm: Any,
+    alpha_list: list,
+    num_episodes: int,
+    num_runs: int,
+    true_value: np.ndarray,
 ) -> list:
     error_hist = []
     V_hist = np.zeros(shape=(num_runs, num_episodes, 5))
     for alpha in alpha_list:
         for i in range(num_runs):
-            v_single = TD_evaluation(alpha=alpha, num_episodes=num_episodes)
-            V_hist[i] = v_single[:, 1:-1]
-
-        error = rms(V_hist, true_value)
-        error_hist.append(error)
-    return error_hist
-
-
-# Run MC evaluation for given episodes
-def parameter_sweep_mc(
-    alpha_list: list, num_episodes: int, num_runs: int, true_value: np.ndarray
-) -> list:
-    error_hist = []
-    V_hist = np.zeros(shape=(num_runs, num_episodes, 5))
-    for alpha in alpha_list:
-        for i in range(num_runs):
-            v_single = MC_evaluation(alpha=alpha, num_episodes=num_episodes)
+            v_single = algorithm(alpha=alpha, num_episodes=num_episodes)
             V_hist[i] = v_single[:, 1:-1]
 
         error = rms(V_hist, true_value)
@@ -161,12 +150,12 @@ def algorithm_comparison(
 ) -> None:
     # param sweeps on both algorithms
     alpha_list_mc = [0.01, 0.02, 0.03, 0.04]
-    mc_error_hist = parameter_sweep_mc(
-        alpha_list_mc, num_episodes, num_runs, true_value
+    mc_error_hist = parameter_sweep(
+        MC_evaluation, alpha_list_mc, num_episodes, num_runs, true_value
     )
     alpha_list_td = [0.05, 0.1, 0.15]
-    td_error_hist = parameter_sweep_td(
-        alpha_list_td, num_episodes, num_runs, true_value
+    td_error_hist = parameter_sweep(
+        TD_evaluation, alpha_list_td, num_episodes, num_runs, true_value
     )
 
     # Plotting the result
@@ -214,7 +203,7 @@ def algorithm_comparison(
         fontweight="bold",
     )
     plt.legend()
-    plt.savefig("./plots/example_6_2/rms_compare.png")
+    # plt.savefig("./plots/example_6_2/rms_compare.png")
     plt.show()
 
 
