@@ -84,3 +84,7 @@ This chapter introduced temporal-difference (TD) learning, and showed how it can
 <div align='center'>
     <img src='./chapter_06_temporal_difference_learning/plots/figure_6_3.png' width=70%>
 </div>
+
+### **Chapter 7: $n$-step Bootstrapping** &nbsp; &nbsp; :link:[link](/chapter_07_n_step_bootstrapping/)
+
+*In progress*
